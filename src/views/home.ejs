@@ -13,13 +13,18 @@
     <link rel="stylesheet" href="Styles/bootstrap.css" />
 
     <link rel="stylesheet" href="Styles/home.css" />
+
+    <script
+      src="https://kit.fontawesome.com/65448a561c.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
 
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          <img src="Images/banner-image.png" alt="" width="120px">
+          <img src="Images/banner-image.png" alt="" width="120px" />
         </a>
         <button
           class="navbar-toggler no-border-toggle"
@@ -56,114 +61,68 @@
     </div>
 
     <figure class="fad-section">
-      <h1>Novedades</h1>
-      <blockquote class="blockquote">
-        <p class="mb-0">
-          Descubre lo último en moda: prendas frescas, estilos de temporada y
-          todo lo que necesitas para renovar tu look. ¡Atrévete a estrenar tu
-          flow Flayba hoy!
-        </p>
-      </blockquote>
+      <div style="display: block; text-align: center; margin-bottom: 10px;">
+        <img src="Images/fad-image.png" alt="" width="250px">
+      </div>
     </figure>
-
     <div class="accordion" id="accordionExample">
+      <% Object.keys(categorias).forEach((catId, index) => { const cat =
+      categorias[catId]; const collapseId = `collapse${index + 1}`; const
+      headingId = `heading${index + 1}`; %>
       <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
+        <h2 class="accordion-header" id="<%= headingId %>">
           <button
-            class="accordion-button collapsed"
+            class="accordion-button <%= index === 0 ? '' : 'collapsed' %>"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#collapseOne"
-            aria-expanded="false"
-            aria-controls="collapseOne"
+            data-bs-target="#<%= collapseId %>"
+            aria-expanded="<%= index === 0 ? 'true' : 'false' %>"
+            aria-controls="<%= collapseId %>"
           >
-            Prendas superiores
+            <%= cat.nombre %>
           </button>
         </h2>
         <div
-          id="collapseOne"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingOne"
+          id="<%= collapseId %>"
+          class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>"
+          aria-labelledby="<%= headingId %>"
           data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
-            <strong>This is the first item's accordion body.</strong> It is
-            shown by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+              <% if(cat.productos.length === 0) { %>
+              <p>No hay productos en esta categoría.</p>
+              <% } else { %> <% cat.productos.forEach(producto => { %>
+              <div class="col">
+                <div class="card h-100">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title"><%= producto.nombre %></h5>
+                    <p class="card-text flex-grow-1">
+                      <%= producto.descripcion %>
+                    </p>
+                    <p class="card-text fw-bold">
+                      $<%= producto.precio.toFixed(0) %>
+                    </p>
+                    <button
+                      class="btn btn-primary mt-auto add-to-cart-btn"
+                      data-producto="<%= producto.nombre %>"
+                    >
+                      <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <% }) %> <% } %>
+            </div>
           </div>
         </div>
       </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseTwo"
-            aria-expanded="false"
-            aria-controls="collapseTwo"
-          >
-            Prendas inferiores
-          </button>
-        </h2>
-        <div
-          id="collapseTwo"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingTwo"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <strong>This is the second item's accordion body.</strong> It is
-            hidden by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingThree">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseThree"
-            aria-expanded="false"
-            aria-controls="collapseThree"
-            style="color: indianred;"
-          >
-            Tiempo limitado!
-          </button>
-        </h2>
-        <div
-          id="collapseThree"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingThree"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <strong>This is the third item's accordion body.</strong> It is
-            hidden by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
+      <% }) %>
     </div>
   </body>
-  <footer class="bg-light text-center text-muted py-4 mt-5 no-border-toggle fixed-bottom">
+  <footer
+    class="bg-light text-center text-muted py-4 mt-5 no-border-toggle fixed-bottom"
+  >
     <div class="container">
       <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
       <p class="mb-0">

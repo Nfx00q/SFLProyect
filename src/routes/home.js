@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// Redirige la raíz '/' a '/home'
-router.get('/', (req, res) => {
-  res.redirect('/home');
-});
+const homeController = require('../controllers/homeController');
+
+router.get('/', homeController.getHomePage);
 
 module.exports = router;
