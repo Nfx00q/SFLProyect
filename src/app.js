@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const mysql = require('mysql');
 const myConnection = require('express-myconnection')
 const session = require('express-session');
+const catalogRoutes = require('./routes/catalog');
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use(myConnection(mysql, {
 
 app.use('/', homeRoutes)
 app.use('/shop-cart', cartRoutes);
+app.use('/catalog', catalogRoutes);
 
 // Static files
 
