@@ -2,6 +2,10 @@
     color: indianred;
 }
 
+footer.fixed-bottom {
+    z-index: 99;
+}
+
 body {
     background-color: rgb(238, 238, 238);
 }

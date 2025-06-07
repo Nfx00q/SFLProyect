@@ -26,6 +26,18 @@ exports.login = (req, res) => {
         correo: usuario.mail_us,
         rol: usuario.rol_id_rol
       };
+
+      res.redirect('/');
     });
+  });
+};
+
+exports.logout = (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error al cerrar sesión');
+    }
+    res.redirect('/login');
   });
 };

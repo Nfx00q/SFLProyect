@@ -10,7 +10,6 @@ const app = express();
 // Importing routes
 
 const homeRoutes = require('./routes/home')
-const cartRoutes = require('./routes/shop-cart');
 const catalogRoutes = require('./routes/catalog');
 const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register');
@@ -46,7 +45,6 @@ app.use(myConnection(mysql, {
 // Routes
 
 app.use('/', homeRoutes)
-app.use('/shop-cart', cartRoutes);
 app.use('/catalog', catalogRoutes);
 app.use('/register', registerRoutes);
 app.use('/', loginRoutes);

@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>SFL - Registro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="Styles/bootstrap.css" />
-  <link rel="stylesheet" href="Styles/session.css">
+  <link rel="stylesheet" href="Styles/session.css" />
+  <style>
+    #suggestions {
+      border: 1px solid #ccc;
+      max-height: 150px;
+      overflow-y: auto;
+      position: absolute;
+      background: white;
+      z-index: 9999;
+      width: 100%;
+    }
+    #suggestions div {
+      padding: 5px;
+      cursor: pointer;
+    }
+    #suggestions div:hover {
+      background-color: #eee;
+    }
+  </style>
 </head>
 <body>
-
   <div class="container">
     <div class="row justify-content-center align-items-center min-vh-100">
-      <div class="col-md-6 col-lg-5">
+      <div class="col-md-6 col-lg-5 position-relative">
         <div class="card shadow">
           <div class="card-body">
             <h3 class="card-title text-center mb-4">Crear Cuenta</h3>
@@ -27,28 +43,38 @@
             <form action="/register" method="POST" novalidate>
               <div class="mb-3">
                 <label class="form-label">Nombre completo</label>
-                <input type="text" name="nom_us" class="form-control" required>
+                <input type="text" name="nom_us" class="form-control" required />
               </div>
 
               <div class="mb-3">
                 <label class="form-label">Correo electrónico</label>
-                <input type="email" name="mail_us" class="form-control" required>
+                <input type="email" name="mail_us" class="form-control" required />
               </div>
 
               <div class="mb-3">
                 <label class="form-label">Contraseña</label>
-                <input type="password" name="pass_us" class="form-control" required minlength="6">
+                <input type="password" name="pass_us" class="form-control" required minlength="6" />
               </div>
 
-              <div class="mb-3">
-                <label class="form-label">Teléfono</label>
-                <input type="text" name="telefono" class="form-control" required pattern="^\d{8,15}$">
-              </div>
-
-              <div class="mb-3">
+              <div class="mb-3 position-relative">
                 <label class="form-label">Dirección</label>
-                <input type="text" name="direccion" class="form-control" rows="3" required></input>
+                <input
+                  id="direccion"
+                  name="direccion"
+                  type="text"
+                  class="form-control"
+                  autocomplete="off"
+                  required
+                />
+                <div id="suggestions"></div>
               </div>
+
+              <!-- Campos ocultos para dirección -->
+              <input type="hidden" id="calle" name="calle" />
+              <input type="hidden" id="ciudad" name="ciudad" />
+              <input type="hidden" id="region" name="region" />
+              <input type="hidden" id="cod_postal" name="cod_postal" />
+              <input type="hidden" id="pais" name="pais" />
 
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Registrarse</button>
@@ -61,6 +87,87 @@
       </div>
     </div>
   </div>
+
+  <script>
+    const mapboxToken = 'pk.eyJ1IjoibmZ4MDBxIiwiYSI6ImNtYm1vZW80OTFiOG8ybnB4eGl2enM4bGgifQ.XZhGGiTV9NZgrEpeXVx7pA';
+
+    const direccionInput = document.getElementById('direccion');
+    const suggestions = document.getElementById('suggestions');
+
+    let controller = null; // Para cancelar fetch anteriores
+    direccionInput.addEventListener('input', () => {
+      const query = direccionInput.value.trim();
+      suggestions.innerHTML = '';
+      if (query.length < 3) return;
+
+      if (controller) controller.abort();
+      controller = new AbortController();
+
+      fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+          query
+        )}.json?access_token=${mapboxToken}&autocomplete=true&limit=5&types=address,place,locality,region,country`,
+        { signal: controller.signal }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.features) return;
+          suggestions.innerHTML = '';
+          data.features.forEach((feature) => {
+            const div = document.createElement('div');
+            div.textContent = feature.place_name;
+            div.addEventListener('click', () => {
+              direccionInput.value = feature.place_name;
+              suggestions.innerHTML = '';
+              fillAddressFields(feature);
+            });
+            suggestions.appendChild(div);
+          });
+        })
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            console.error('Error al consultar Mapbox:', err);
+          }
+        });
+    });
+
+    function fillAddressFields(feature) {
+      // Resetea primero
+      document.getElementById('calle').value = '';
+      document.getElementById('ciudad').value = '';
+      document.getElementById('region').value = '';
+      document.getElementById('cod_postal').value = '';
+      document.getElementById('pais').value = '';
+
+      // Mapbox devuelve context y text, busca según tipos
+      const context = feature.context || [];
+      // La calle suele estar en "text" o en feature.address + feature.text
+      const street = feature.address ? feature.address + ' ' + feature.text : feature.text;
+
+      document.getElementById('calle').value = street || '';
+
+      // Helper para encontrar contexto
+      function getContext(type) {
+        const c = context.find((c) => c.id.startsWith(type));
+        return c ? c.text : '';
+      }
+
+      document.getElementById('ciudad').value = getContext('place') || getContext('locality') || '';
+      document.getElementById('region').value = getContext('region') || '';
+      document.getElementById('cod_postal').value = getContext('postcode') || '';
+      document.getElementById('pais').value = getContext('country') || '';
+    }
+
+    // Cerrar sugerencias si clic fuera
+    document.addEventListener('click', (e) => {
+      if (
+        e.target !== direccionInput &&
+        !suggestions.contains(e.target)
+      ) {
+        suggestions.innerHTML = '';
+      }
+    });
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
