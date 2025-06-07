@@ -4,7 +4,6 @@ const morgan = require('morgan');
 const mysql = require('mysql');
 const myConnection = require('express-myconnection')
 const session = require('express-session');
-const catalogRoutes = require('./routes/catalog');
 
 const app = express();
 
@@ -12,6 +11,10 @@ const app = express();
 
 const homeRoutes = require('./routes/home')
 const cartRoutes = require('./routes/shop-cart');
+const catalogRoutes = require('./routes/catalog');
+const loginRoutes = require('./routes/login');
+const registerRoutes = require('./routes/register');
+
 
 // Settings
 
@@ -27,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(session({
-  secret: 'mi_secreto_sesion',
+  secret: 'admin',
   resave: false,
   saveUninitialized: false
 }));
@@ -45,6 +48,14 @@ app.use(myConnection(mysql, {
 app.use('/', homeRoutes)
 app.use('/shop-cart', cartRoutes);
 app.use('/catalog', catalogRoutes);
+app.use('/register', registerRoutes);
+app.use('/', loginRoutes);
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/login');
+  });
+});
 
 // Static files
 

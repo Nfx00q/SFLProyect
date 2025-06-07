@@ -1,0 +1,10 @@
+.no-border-toggle {
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+.no-border-toggle:focus {
+  outline: none;
+  box-shadow: none;
+}

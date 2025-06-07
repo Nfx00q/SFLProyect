@@ -1,4 +1,4 @@
-const controller = {};
+const productController = {};
 
 controller.list = (req, res) => {
     req.getConnection((err, conn) => {
@@ -14,4 +14,4 @@ controller.list = (req, res) => {
     });
 };
 
-module.exports = controller;
+module.exports = productController;
