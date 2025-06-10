@@ -13,7 +13,7 @@ const homeRoutes = require('./routes/home')
 const catalogRoutes = require('./routes/catalog');
 const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register');
-
+const adminProductsRoutes = require('./routes/admin/products');
 
 // Settings
 
@@ -48,6 +48,7 @@ app.use('/', homeRoutes)
 app.use('/catalog', catalogRoutes);
 app.use('/register', registerRoutes);
 app.use('/', loginRoutes);
+app.use('/admin/products', adminProductsRoutes);
 
 app.get('/logout', (req, res) => {
   req.session.destroy(() => {
