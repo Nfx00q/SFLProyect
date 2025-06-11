@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard Admin</title>
+  <link rel="stylesheet" href="../Styles/bootstrap.css" />
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+
+  <div class="bg-white p-4 rounded shadow-sm" style="width: 320px;">
+    <h1 class="h3 text-center mb-4 text-primary fw-bold">Panel de Administración</h1>
+    <p class="text-center text-secondary mb-4">Bienvenido, <%= usuario.nombre %></p>
+
+    <nav>
+      <ul class="list-unstyled m-0">
+        <li class="mb-3">
+          <a href="/admin/products" class="btn btn-primary w-100 fw-semibold">Productos</a>
+        </li>
+        <li class="mb-3">
+          <a href="/admin/users" class="btn btn-primary w-100 fw-semibold">Usuarios</a>
+        </li>
+        <li>
+          <a href="/logout" class="btn btn-danger w-100 fw-semibold">Cerrar sesión</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</body>
+</html>
+

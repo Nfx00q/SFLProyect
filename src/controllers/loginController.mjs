@@ -33,7 +33,13 @@ export async function login(req, res) {
     };
 
     logger.info(`Inicio de sesión exitoso para el usuario: ` + usuario.mail_us);
-    res.redirect('/');
+    if (usuario.rol_id_rol === 1) {
+      // Redirige a dashboard admin
+      return res.redirect('/admin');
+    } else {
+      // Redirige a la página principal normal
+      return res.redirect('/');
+    }
   } catch (err) {
     console.error(err);
     logger.error('Error al consultar la base de datos:', err);
