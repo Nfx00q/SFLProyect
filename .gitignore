@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# Dependencias instaladas por npm
+package-lock.json
+
+# Directorios de build
+dist/
+build/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db

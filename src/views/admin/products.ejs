@@ -40,11 +40,7 @@
             <td><%= producto.categoria_id_categoria %></td>
             <td>
               <% if (producto.url_img) { %>
-              <img
-                src="<%= producto.url_img %>"
-                alt="Imagen"
-                style="width: 60px; height: auto"
-              />
+              <img src="/Clothes/<%= producto.url_img %>" width="100px" />
               <small><%= producto.url_img %></small>
               <% } else { %> Sin imagen <% } %>
             </td>
@@ -338,7 +334,7 @@
         // Cambiar action del form para el POST correcto
         document.getElementById(
           "formEdit"
-        ).action = `/admin/products/edit/${id}`;
+        ).action = `/admin/products/update/${id}`;
       });
 
       // Modal Eliminar
