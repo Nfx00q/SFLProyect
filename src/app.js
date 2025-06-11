@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path')
 const morgan = require('morgan');
@@ -29,17 +30,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(session({
-  secret: 'admin',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
 
 app.use(myConnection(mysql, {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    port: '3306',
-    database: 'sfl-db'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME
 }, 'single'))
 
 // Routes
