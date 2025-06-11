@@ -40,7 +40,7 @@
               </div>
             <% } %>
 
-            <form action="/register" method="POST" novalidate>
+            <form action="/register" id="form" method="POST" novalidate>
               <div class="mb-3">
                 <label class="form-label">Nombre completo</label>
                 <input type="text" name="nom_us" class="form-control" required />
@@ -49,6 +49,16 @@
               <div class="mb-3">
                 <label class="form-label">Correo electrónico</label>
                 <input type="email" name="mail_us" class="form-control" required />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Teléfono</label>
+                <div class="input-group">
+                  <span class="input-group-text">+56</span>
+                  <input type="text" id="tel_us" name="tel_us_display" class="form-control" maxlength="11" required />
+                  <input type="hidden" id="tel_us_clean" name="tel_us" />
+                </div>
+                <div id="tel-error" class="text-danger small mt-1" style="display:none;">Ingrese un número válido (9 dígitos)</div>
               </div>
 
               <div class="mb-3">
@@ -79,6 +89,11 @@
                 <button type="submit" class="btn btn-primary">Registrarse</button>
               </div>
             </form>
+
+            <div id="direccion-error" class="alert alert-danger mt-3 d-none" role="alert">
+              Debes seleccionar una dirección completa o selecciona desde las sugerencias.
+            </div>
+
 
             <p class="text-center mt-3">¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></p>
           </div>

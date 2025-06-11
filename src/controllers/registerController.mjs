@@ -11,6 +11,7 @@ export async function registrarUsuario(req, res) {
     nom_us,
     mail_us,
     pass_us,
+    tel_us,
     calle,
     ciudad,
     region,
@@ -19,6 +20,12 @@ export async function registrarUsuario(req, res) {
   } = req.body;
 
   logger.info(`Intentando registrar un nuevo usuario con correo: ${mail_us}`);
+
+  // Validación de dirección
+  if (!calle || !ciudad || !region || !cod_postal || !pais) {
+    logger.warn('Dirección incompleta proporcionada por el usuario');
+    return res.render('register', { error: 'Por favor completa todos los campos de la dirección.' });
+  }
 
   const pass_encriptada = hashSync(pass_us, 10);
 
@@ -37,6 +44,7 @@ export async function registrarUsuario(req, res) {
       mail_us,
       pass_us: pass_encriptada,
       rol_id_rol: 2,
+      tel_us,
     };
 
     const [result] = await pool.query('INSERT INTO usuario SET ?', nuevoUsuario);
@@ -62,3 +70,4 @@ export async function registrarUsuario(req, res) {
     return res.status(500).render('register', { error: 'Error interno del servidor' });
   }
 }
+

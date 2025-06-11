@@ -72,3 +72,54 @@ const mapboxToken = 'pk.eyJ1IjoibmZ4MDBxIiwiYSI6ImNtYm1vZW80OTFiOG8ybnB4eGl2enM4
         suggestions.innerHTML = '';
       }
     });
+
+const telInput = document.getElementById('tel_us');
+  const telCleanInput = document.getElementById('tel_us_clean');
+  const telError = document.getElementById('tel-error');
+
+  telInput.addEventListener('input', () => {
+    let value = telInput.value.replace(/\D/g, '').slice(0,9);
+
+    if (value.length > 1) {
+      value = value[0] + ' ' + value.slice(1,5) + ' ' + value.slice(5);
+    }
+
+    telInput.value = value.trim();
+
+    if (value.replace(/\s/g, '').length === 9) {
+      telError.style.display = 'none';
+    } else {
+      telError.style.display = 'block';
+    }
+
+    // Actualizar input oculto con número limpio
+    telCleanInput.value = value.replace(/\s/g, '');
+  });
+
+  // Opcional: validar en submit que esté correcto
+  document.getElementById('form').addEventListener('submit', e => {
+    if (telCleanInput.value.length !== 9) {
+      e.preventDefault();
+      telError.style.display = 'block';
+      telInput.focus();
+    }
+  });
+
+document.getElementById('form').addEventListener('submit', function (e) {
+  const calle = document.getElementById('calle').value.trim();
+  const ciudad = document.getElementById('ciudad').value.trim();
+  const region = document.getElementById('region').value.trim();
+  const cod_postal = document.getElementById('cod_postal').value.trim();
+  const pais = document.getElementById('pais').value.trim();
+
+  const errorBox = document.getElementById('direccion-error');
+
+  if (!calle || !ciudad || !region || !cod_postal || !pais) {
+    e.preventDefault();
+    errorBox.classList.remove('d-none');
+    errorBox.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    errorBox.classList.add('d-none');
+  }
+});
+

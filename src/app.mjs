@@ -17,6 +17,7 @@ import loginRoutes from "./routes/login.mjs";
 import registerRoutes from "./routes/register.mjs";
 import adminProductsRoutes from "./routes/admin/products.mjs";
 import adminRoutes from './routes/admin/index.mjs';
+import adminUsersRoutes from './routes/admin/users.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,6 +54,7 @@ app.use("/login", loginRoutes);
 app.use("/logout", loginRoutes);
 app.use("/admin/products", isAdmin, adminProductsRoutes);
 app.use('/admin', isAdmin, adminRoutes);
+app.use('/admin/users', isAdmin, adminUsersRoutes);
 
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
