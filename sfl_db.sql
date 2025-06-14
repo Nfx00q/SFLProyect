@@ -35,12 +35,6 @@ INSERT INTO `categoria` (`id_categoria`, `nom_categoria`, `des_categoria`) VALUE
 (12, 'Ropa Formal', 'Camisas, blazers y más para ocasiones elegantes'),
 (14, 'Sudaderas', 'Comodidad para el día a día');
 
-DROP TABLE IF EXISTS `color`;
-CREATE TABLE `color` (
-  `id_color` int(11) NOT NULL,
-  `nom_color` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 DROP TABLE IF EXISTS `direccion`;
 CREATE TABLE `direccion` (
   `id_direccion` int(11) NOT NULL,
@@ -244,7 +238,6 @@ CREATE TABLE `variante_producto` (
   `id_var` int(11) NOT NULL,
   `producto_id_producto` int(11) NOT NULL,
   `talla_id_talla` int(11) NOT NULL,
-  `color_id_color` int(11) NOT NULL,
   `stock_var` int(11) NOT NULL,
   `precio_var` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
