@@ -67,6 +67,11 @@ CREATE TABLE `estado_usuario` (
   `nom_est` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `estado_usuario` (`id_est`, `nom_est`) VALUES
+(1, 'activo'),
+(2, 'inactivo'),
+(3, 'suspendido');
+
 DROP TABLE IF EXISTS `imagen_producto`;
 CREATE TABLE `imagen_producto` (
   `id_img` int(11) NOT NULL,
@@ -230,7 +235,7 @@ CREATE TABLE `usuario` (
   `mail_us` varchar(100) NOT NULL,
   `pass_us` varchar(255) NOT NULL,
   `rol_id_rol` int(11) NOT NULL,
-  `id_est` int(11) DEFAULT NULL,
+  `id_est` int(11) NOT NULL DEFAULT 1,
   `tel_us` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
