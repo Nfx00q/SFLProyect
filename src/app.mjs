@@ -6,6 +6,9 @@ import session from "express-session";
 import chalk from "chalk";
 import flash from "connect-flash";
 import { isAdmin } from './middlewares/auth.mjs';
+import methodOverride from 'method-override';
+import { checkUserExists } from './middlewares/checkUserExists.mjs';
+import { checkUsuarioActivo } from './middlewares/checkUserActive.mjs';
 
 // Importar la conexión desde database.mjs
 import { pool } from "./database.mjs";
@@ -44,17 +47,19 @@ app.use(
   })
 );
 
+app.use(methodOverride('_method'));
+
 // Aquí usarías pool para queries en tus controladores, no como middleware
 
 // Routes
 app.use("/", homeRoutes);
-app.use("/catalog", catalogRoutes);
+app.use("/catalog", checkUsuarioActivo, catalogRoutes);
 app.use("/register", registerRoutes);
 app.use("/login", loginRoutes);
 app.use("/logout", loginRoutes);
-app.use("/admin/products", isAdmin, adminProductsRoutes);
-app.use('/admin', isAdmin, adminRoutes);
-app.use('/admin/users', isAdmin, adminUsersRoutes);
+app.use("/admin/products", checkUserExists, checkUsuarioActivo, isAdmin, adminProductsRoutes);
+app.use('/admin', checkUserExists, checkUsuarioActivo, isAdmin, adminRoutes);
+app.use('/admin/users', checkUserExists, checkUsuarioActivo, isAdmin, adminUsersRoutes);
 
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {

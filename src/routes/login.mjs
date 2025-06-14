@@ -1,5 +1,5 @@
-import { Router } from 'express';
-const router = Router();
+import express from 'express';
+const router = express.Router();
 import { getLoginPage, login, logout } from '../controllers/loginController.mjs';
 
 router.get('/', getLoginPage);

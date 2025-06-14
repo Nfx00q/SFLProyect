@@ -14,7 +14,7 @@ export async function login(req, res) {
     const [results] = await pool.query('SELECT * FROM usuario WHERE mail_us = ?', [mail_us]);
 
     if (results.length === 0) {
-      logger.warn('Correo no registrado, ingresó: ' + usuario.mail_us);
+      logger.warn('Correo no registrado, ingresó: ' + mail_us);
       return res.render('login', { error: 'Correo no registrado' });
     }
 
@@ -34,10 +34,8 @@ export async function login(req, res) {
 
     logger.info(`Inicio de sesión exitoso para el usuario: ` + usuario.mail_us);
     if (usuario.rol_id_rol === 1) {
-      // Redirige a dashboard admin
       return res.redirect('/admin');
     } else {
-      // Redirige a la página principal normal
       return res.redirect('/');
     }
   } catch (err) {

@@ -1,0 +1,10 @@
+<%- include('../partials/header', { title: 'Editar Usuario' }) %>
+<div class="container py-4">
+  <h1>Editar Usuario</h1>
+  <form action="/admin/users/<%= usuario.id_us %>?_method=PUT" method="POST">
+    <%- include('userFormFields', { mode: 'edit', roles, usuario }) %>
+    <button class="btn btn-primary">Guardar Cambios</button>
+    <a href="/admin/users" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+<%- include('../partials/footer') %>

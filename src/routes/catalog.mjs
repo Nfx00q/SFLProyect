@@ -1,5 +1,5 @@
-import { Router } from 'express';
-const router = Router();
+import express from 'express';
+const router = express.Router();
 import { getCatalogPage } from '../controllers/catalogController.mjs';
 
 router.get('/', getCatalogPage);

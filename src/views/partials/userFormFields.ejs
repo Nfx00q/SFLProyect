@@ -1,0 +1,29 @@
+<div class="mb-3">
+  <label class="form-label">Nombre</label>
+  <input type="text" name="nom_us" value="<%= usuario.nom_us || '' %>" class="form-control" required>
+</div>
+<div class="mb-3">
+  <label class="form-label">Email</label>
+  <input type="email" name="mail_us" value="<%= usuario.mail_us || '' %>" class="form-control" required>
+</div>
+<% if (mode === 'create') { %>
+  <div class="mb-3">
+    <label class="form-label">Contraseña</label>
+    <input type="password" name="pass_us" class="form-control" required>
+  </div>
+<% } else { %>
+  <div class="mb-3">
+    <label class="form-label">Contraseña (opcional)</label>
+    <input type="password" name="pass_us" class="form-control" placeholder="Dejar vacío para no cambiar">
+  </div>
+<% } %>
+<div class="mb-3">
+  <label class="form-label">Rol</label>
+  <select name="rol_id_rol" class="form-select" required>
+    <% roles.forEach(r => { %>
+      <option value="<%= r.id_rol %>" <%= usuario.rol_id_rol === r.id_rol ? 'selected' : '' %>>
+        <%= r.nom_rol %>
+      </option>
+    <% }) %>
+  </select>
+</div>

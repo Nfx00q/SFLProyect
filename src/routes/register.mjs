@@ -1,5 +1,5 @@
-import { Router } from 'express';
-const router = Router();
+import express from 'express';
+const router = express.Router();
 import { mostrarFormulario, registrarUsuario } from '../controllers/registerController.mjs';
 
 // Ruta para mostrar el formulario (GET /register)

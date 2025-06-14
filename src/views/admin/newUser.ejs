@@ -1,0 +1,10 @@
+<%- include('../partials/header', { title: 'Crear Usuario' }) %>
+<div class="container py-4">
+  <h1>Crear Usuario</h1>
+  <form action="/admin/users" method="POST">
+    <%- include('userFormFields', { mode: 'create', roles, usuario: {} }) %>
+    <button class="btn btn-success">Crear</button>
+    <a href="/admin/users" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+<%- include('../partials/footer') %>
