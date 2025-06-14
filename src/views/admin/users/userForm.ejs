@@ -1,0 +1,125 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-4">
+  <h2 class="mb-4"><%= mode === 'edit' ? 'Editar Usuario' : 'Crear Usuario' %></h2>
+
+  <% if (typeof error !== 'undefined') { %>
+    <div class="alert alert-danger">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <form method="POST" action="<%= mode === 'edit' ? '/admin/users/' + usuario.id_us + '?_method=PUT' : '/admin/users' %>" novalidate>
+
+    <style>
+      select {
+        text-transform: capitalize;
+      }
+    </style>
+
+    <% if (mode === 'edit') { %>
+      <input type="hidden" name="id_us" value="<%= usuario.id_us %>">
+    <% } %>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="nom_us" class="form-label">Nombre</label>
+        <input
+          type="text"
+          id="nom_us"
+          name="nom_us"
+          class="form-control"
+          required
+          value="<%= mode === 'edit' ? usuario.nom_us : '' %>"
+          autofocus
+          aria-describedby="nom_us_help"
+        />
+        <div id="nom_us_help" class="form-text">Nombre completo del usuario</div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="mail_us" class="form-label">Email</label>
+        <input
+          type="email"
+          id="mail_us"
+          name="mail_us"
+          class="form-control"
+          required
+          value="<%= mode === 'edit' ? usuario.mail_us : '' %>"
+          aria-describedby="mail_us_help"
+        />
+        <div id="mail_us_help" class="form-text">Correo electrónico válido</div>
+      </div>
+    </div>
+
+    <% if (mode === 'create') { %>
+      <div class="mb-3">
+        <label for="pass_us" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          id="pass_us"
+          name="pass_us"
+          class="form-control"
+          required
+          minlength="6"
+          aria-describedby="pass_us_help"
+        />
+        <div id="pass_us_help" class="form-text">Mínimo 6 caracteres</div>
+      </div>
+    <% } else { %>
+      <div class="mb-3">
+        <small class="text-muted">Para cambiar la contraseña, utiliza el módulo correspondiente.</small>
+      </div>
+    <% } %>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="rol_id_rol" class="form-label">Rol</label>
+        <select
+          id="rol_id_rol"
+          name="rol_id_rol"
+          class="form-select"
+          required
+          aria-describedby="rol_id_rol_help"
+        >
+          <option value="" disabled <%= mode === 'create' ? 'selected' : '' %>>Selecciona un rol</option>
+          <% roles.forEach(r => { %>
+            <option value="<%= r.id_rol %>" <%= mode === 'edit' && usuario.rol_id_rol === r.id_rol ? 'selected' : '' %>>
+              <%= r.nom_rol %>
+            </option>
+          <% }) %>
+        </select>
+        <div id="rol_id_rol_help" class="form-text">Asignar rol al usuario</div>
+      </div>
+
+      <% if (mode === 'edit') { %>
+        <div class="col-md-6">
+          <label for="id_est" class="form-label">Estado</label>
+          <select
+            id="id_est"
+            name="id_est"
+            class="form-select"
+            required
+            aria-describedby="id_est_help"
+          >
+            <% estados.forEach(e => { %>
+              <option value="<%= e.id_est %>" <%= usuario.id_est === e.id_est ? 'selected' : '' %>>
+                <%= e.nom_est %>
+              </option>
+            <% }) %>
+          </select>
+          <div id="id_est_help" class="form-text">Estado actual del usuario</div>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <a href="/admin/users" class="btn btn-outline-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">
+        <%= mode === 'edit' ? 'Guardar Cambios' : 'Crear Usuario' %>
+      </button>
+    </div>
+  </form>
+</div>
+
+<%- include('../../partials/footer') %>

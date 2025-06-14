@@ -13,7 +13,7 @@ export async function getUsers(req, res) {
   const [roles] = await pool.query('SELECT * FROM rol');
   const [estados] = await pool.query('SELECT * FROM estado_usuario');
 
-  res.render('admin/users', { usuario: usuarios, roles, estados });
+  res.render('admin/users/users', { usuario: usuarios, roles, estados });
 }
 
 
@@ -24,29 +24,72 @@ export async function createUser(req, res) {
     'INSERT INTO usuario (nom_us, mail_us, pass_us, rol_id_rol, id_est) VALUES (?, ?, ?, ?, ?)',
     [nom_us, mail_us, hash, rol_id_rol, 1]
   );
-  res.redirect('/admin/users');
+  res.redirect('/admin/users/users');
 }
 
 export async function updateUser(req, res) {
   const { id } = req.params;
   const { nom_us, mail_us, pass_us, rol_id_rol, id_est } = req.body;
 
-  if (pass_us && pass_us.trim() !== '') {
-    // Si envían contraseña nueva, la hasheamos y actualizamos con ella
-    const hash = await bcrypt.hash(pass_us, 10);
-    await pool.query(
-      'UPDATE usuario SET nom_us = ?, mail_us = ?, pass_us = ?, rol_id_rol = ?, id_est = ? WHERE id_us = ?',
-      [nom_us, mail_us, hash, rol_id_rol, id_est, id]
-    );
-  } else {
-    // Si no envían contraseña, actualizamos solo los otros campos
-    await pool.query(
-      'UPDATE usuario SET nom_us = ?, mail_us = ?, rol_id_rol = ?, id_est = ? WHERE id_us = ?',
-      [nom_us, mail_us, rol_id_rol, id_est, id]
-    );
-  }
+  try {
+    // Verificar si el usuario existe
+    const [rows] = await pool.query('SELECT * FROM usuario WHERE id_us = ?', [id]);
+    if (rows.length === 0) {
+      // Usuario no encontrado
+      return res.status(404).render('admin/users/edit', {
+        error: 'Usuario no encontrado',
+        mode: 'edit',
+        usuario: { id_us: id, nom_us, mail_us, rol_id_rol, id_est }, // mantener valores para que no se pierdan
+        roles: await getRoles(),     // asume que tienes función para roles
+        estados: await getEstados()  // asume que tienes función para estados
+      });
+    }
 
-  res.redirect('/admin/users');
+    if (pass_us && pass_us.trim() !== '') {
+      const hash = await bcrypt.hash(pass_us, 10);
+      const [result] = await pool.query(
+        'UPDATE usuario SET nom_us = ?, mail_us = ?, pass_us = ?, rol_id_rol = ?, id_est = ? WHERE id_us = ?',
+        [nom_us, mail_us, hash, rol_id_rol, id_est, id]
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(400).render('admin/users/edit', {
+          error: 'No se pudo actualizar el usuario',
+          mode: 'edit',
+          usuario: { id_us: id, nom_us, mail_us, rol_id_rol, id_est },
+          roles: await getRoles(),
+          estados: await getEstados()
+        });
+      }
+    } else {
+      const [result] = await pool.query(
+        'UPDATE usuario SET nom_us = ?, mail_us = ?, rol_id_rol = ?, id_est = ? WHERE id_us = ?',
+        [nom_us, mail_us, rol_id_rol, id_est, id]
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(400).render('admin/users/edit', {
+          error: 'No se pudo actualizar el usuario',
+          mode: 'edit',
+          usuario: { id_us: id, nom_us, mail_us, rol_id_rol, id_est },
+          roles: await getRoles(),
+          estados: await getEstados()
+        });
+      }
+    }
+
+    // Si todo fue bien, redirigimos
+    res.redirect('/admin/users');
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('admin/users/edit', {
+      error: 'Error del servidor',
+      mode: 'edit',
+      usuario: { id_us: id, nom_us, mail_us, rol_id_rol, id_est },
+      roles: await getRoles(),
+      estados: await getEstados()
+    });
+  }
 }
 
 export async function deleteUser(req, res) {
@@ -60,7 +103,7 @@ export async function deleteUser(req, res) {
 
   try {
     await pool.query('DELETE FROM usuario WHERE id_us = ?', [id]);
-    res.redirect('/admin/users');
+    res.redirect('/admin/users/users');
   } catch (error) {
     console.error("Error al eliminar usuario:", error);
     res.status(500).send("Error al eliminar usuario");
@@ -89,7 +132,7 @@ export async function getUserDetail(req, res) {
       WHERE p.usuario_id_us = ?
     `, [id]);
 
-    res.render('admin/userDetails', {
+    res.render('admin/users/userDetails', {
       usuario,
       rol,
       direccion,
@@ -113,7 +156,7 @@ export const validateUser = [
 export async function showCreateForm(req, res) {
   const [roles] = await pool.query('SELECT * FROM rol');
   const [estados] = await pool.query('SELECT * FROM estado_usuario');
-  res.render('admin/userForm', { mode: 'create', roles, estados });
+  res.render('admin/users/userForm', { mode: 'create', roles, estados });
 }
 
 export async function showEditForm(req, res) {
@@ -123,7 +166,7 @@ export async function showEditForm(req, res) {
   const [estados] = await pool.query('SELECT * FROM estado_usuario');
 
   if (usuarios.length === 0) return res.status(404).send('Usuario no encontrado');
-  res.render('admin/userForm', { mode: 'edit', usuario: usuarios[0], roles, estados });
+  res.render('admin/users/userForm', { mode: 'edit', usuario: usuarios[0], roles, estados });
 }
 
 

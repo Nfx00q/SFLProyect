@@ -1,4 +1,4 @@
-<%- include('../partials/header', { title: 'Editar Usuario' }) %>
+<%- include('../../partials/header', { title: 'Editar Usuario' }) %>
 <div class="container py-4">
   <h1>Editar Usuario</h1>
   <form action="/admin/users/<%= usuario.id_us %>?_method=PUT" method="POST">
@@ -7,4 +7,4 @@
     <a href="/admin/users" class="btn btn-secondary">Cancelar</a>
   </form>
 </div>
-<%- include('../partials/footer') %>
+<%- include('../../partials/footer') %>

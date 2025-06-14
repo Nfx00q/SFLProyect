@@ -1,0 +1,65 @@
+<%- include('../../partials/header', { title: 'Usuarios' }) %>
+
+<div class="container py-4">
+  <h1 class="mb-4">Usuarios</h1>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="/admin/users/new" class="btn btn-success">
+      <i class="fas fa-plus"></i> Crear Usuario
+    </a>
+    <small class="text-muted">Total usuarios: <%= usuario.length %></small>
+  </div>
+
+  <table class="table table-striped table-hover align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Correo electrónico</th>
+        <th scope="col">Rol</th>
+        <th scope="col">Estado</th>
+        <th scope="col" class="text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% usuario.forEach(u => { %>
+        <tr>
+          <td><%= u.id_us %></td>
+          <td><%= u.nom_us %></td>
+          <td><a href="mailto:<%= u.mail_us %>"><%= u.mail_us %></a></td>
+          <td><%= u.nom_rol %></td>
+          <td>
+            <% if (u.nom_est.toLowerCase() === 'activo') { %>
+              <span class="badge bg-success"><%= u.nom_est %></span>
+            <% } else if (u.nom_est.toLowerCase() === 'inactivo') { %>
+              <span class="badge bg-secondary"><%= u.nom_est %></span>
+            <% } else { %>
+              <span class="badge bg-warning"><%= u.nom_est %></span>
+            <% } %>
+          </td>
+          <td class="text-center">
+            <a href="/admin/users/<%= u.id_us %>/edit" class="btn btn-primary btn-sm me-1" aria-label="Editar usuario <%= u.nom_us %>">
+              <i class="fas fa-pencil-alt"></i>
+            </a>
+            <form 
+              action="/admin/users/<%= u.id_us %>?_method=DELETE" 
+              method="POST" 
+              class="d-inline" 
+              onsubmit="return confirm('¿Seguro que deseas eliminar al usuario <%= u.nom_us %>?')"
+              aria-label="Eliminar usuario <%= u.nom_us %>"
+            >
+              <button class="btn btn-danger btn-sm" type="submit">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </form>
+            <a href="/admin/users/<%= u.id_us %>" class="btn btn-info btn-sm ms-1" aria-label="Ver detalles del usuario <%= u.nom_us %>">
+              <i class="fas fa-eye"></i>
+            </a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../../partials/footer') %>
