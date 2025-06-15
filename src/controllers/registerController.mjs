@@ -3,6 +3,7 @@ import logger from '../utils/logger.mjs';
 import { pool } from '../database.mjs';
 
 export function mostrarFormulario(req, res) {
+  logger.info('Mostrando formulario de registro');
   res.render('register');
 }
 
@@ -16,44 +17,44 @@ export async function registrarUsuario(req, res) {
     ciudad,
     region,
     cod_postal,
-    pais,
+    pais
   } = req.body;
 
   logger.info(`Intentando registrar un nuevo usuario con correo: ${mail_us}`);
 
-  // Validación de dirección
+  // Validación de campos de dirección
   if (!calle || !ciudad || !region || !cod_postal || !pais) {
-    logger.warn('Dirección incompleta proporcionada por el usuario');
-    return res.render('register', { error: 'Por favor completa todos los campos de la dirección.' });
+    logger.warn(`Fallo en el registro - Dirección incompleta para correo: ${mail_us}`);
+    return res.render('register', { error: 'Por favor completa la dirección usando las sugerencias del mapa.' });
   }
 
   const pass_encriptada = hashSync(pass_us, 10);
+  logger.info('Contraseña encriptada correctamente');
 
   try {
-    logger.info('Consultando si el correo ya está registrado');
+    logger.info(`Verificando si el correo ya existe: ${mail_us}`);
     const [results] = await pool.query('SELECT * FROM usuario WHERE mail_us = ?', [mail_us]);
 
     if (results.length > 0) {
-      logger.warn(`El correo ya está registrado: ${mail_us}`);
+      logger.warn(`Registro fallido: el correo ya está en uso - ${mail_us}`);
       return res.render('register', { error: 'El correo ya está registrado' });
     }
 
-    // Insertar usuario
-    const nuevoUsuario = {
+    logger.info('Correo disponible. Procediendo con la creación del usuario');
+
+    const [result] = await pool.query('INSERT INTO usuario SET ?', {
       nom_us,
       mail_us,
       pass_us: pass_encriptada,
       rol_id_rol: 2,
       tel_us,
-    };
+    });
 
-    const [result] = await pool.query('INSERT INTO usuario SET ?', nuevoUsuario);
-    const idUsuario = result.insertId;
-    logger.info(`Usuario registrado con ID ${idUsuario} y correo ${mail_us}`);
+    const userId = result.insertId;
+    logger.info(`Usuario registrado con ID ${userId} y correo ${mail_us}`);
 
-    // Insertar dirección
     const nuevaDireccion = {
-      usuario_id_us: idUsuario,
+      usuario_id_us: userId,
       calle,
       ciudad,
       region,
@@ -61,13 +62,13 @@ export async function registrarUsuario(req, res) {
       pais,
     };
 
+    logger.info(`Insertando dirección para usuario ID ${userId}`);
     await pool.query('INSERT INTO direccion SET ?', nuevaDireccion);
-    logger.info(`Dirección registrada para usuario ID ${idUsuario}`);
+    logger.info('Dirección registrada correctamente');
 
     res.redirect('/login');
   } catch (err) {
-    logger.error(`Error en el proceso de registro: ${err.message}`);
+    logger.error(`Error durante el registro del usuario ${mail_us}: ${err.message}`);
     return res.status(500).render('register', { error: 'Error interno del servidor' });
   }
 }
-

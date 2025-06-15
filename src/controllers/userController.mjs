@@ -24,7 +24,7 @@ export async function createUser(req, res) {
     'INSERT INTO usuario (nom_us, mail_us, pass_us, rol_id_rol, id_est) VALUES (?, ?, ?, ?, ?)',
     [nom_us, mail_us, hash, rol_id_rol, 1]
   );
-  res.redirect('/admin/users/users');
+  res.redirect('/admin/users');
 }
 
 export async function updateUser(req, res) {

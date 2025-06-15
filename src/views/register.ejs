@@ -1,109 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>SFL - Registro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="Styles/bootstrap.css" />
-  <link rel="stylesheet" href="Styles/session.css" />
-  <style>
-    #suggestions {
-      border: 1px solid #ccc;
-      max-height: 150px;
-      overflow-y: auto;
-      position: absolute;
-      background: white;
-      z-index: 9999;
-      width: 100%;
-    }
-    #suggestions div {
-      padding: 5px;
-      cursor: pointer;
-    }
-    #suggestions div:hover {
-      background-color: #eee;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registro de Usuario</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="/Styles/bootstrap.css">
+
+  <!-- Mapbox -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+  <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/Styles/session.css">
 </head>
 <body>
-  <div class="container">
-    <div class="row justify-content-center align-items-center min-vh-100">
-      <div class="col-md-6 col-lg-5 position-relative">
-        <div class="card shadow">
-          <div class="card-body">
-            <h3 class="card-title text-center mb-4">Crear Cuenta</h3>
 
-            <% if (typeof error !== 'undefined') { %>
-              <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%= error %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            <% } %>
+  <div class="form-container">
+    <h3 class="text-center mb-4">Crear Cuenta</h3>
 
-            <form action="/register" id="form" method="POST" novalidate>
-              <div class="mb-3">
-                <label class="form-label">Nombre completo</label>
-                <input type="text" name="nom_us" class="form-control" required />
-              </div>
+    <% if (typeof error !== 'undefined') { %>
+      <div class="alert alert-danger text-center"><%= error %></div>
+    <% } %>
 
-              <div class="mb-3">
-                <label class="form-label">Correo electrónico</label>
-                <input type="email" name="mail_us" class="form-control" required />
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Teléfono</label>
-                <div class="input-group">
-                  <span class="input-group-text">+56</span>
-                  <input type="text" id="tel_us" name="tel_us_display" class="form-control" maxlength="11" required />
-                  <input type="hidden" id="tel_us_clean" name="tel_us" />
-                </div>
-                <div id="tel-error" class="text-danger small mt-1" style="display:none;">Ingrese un número válido (9 dígitos)</div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Contraseña</label>
-                <input type="password" name="pass_us" class="form-control" required minlength="6" />
-              </div>
-
-              <div class="mb-3 position-relative">
-                <label class="form-label">Dirección</label>
-                <input
-                  id="direccion"
-                  name="direccion"
-                  type="text"
-                  class="form-control"
-                  autocomplete="off"
-                  required
-                />
-                <div id="suggestions"></div>
-              </div>
-
-              <input type="hidden" id="calle" name="calle" />
-              <input type="hidden" id="ciudad" name="ciudad" />
-              <input type="hidden" id="region" name="region" />
-              <input type="hidden" id="cod_postal" name="cod_postal" />
-              <input type="hidden" id="pais" name="pais" />
-
-              <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Registrarse</button>
-              </div>
-            </form>
-
-            <div id="direccion-error" class="alert alert-danger mt-3 d-none" role="alert">
-              Debes seleccionar una dirección completa o selecciona desde las sugerencias.
-            </div>
-
-
-            <p class="text-center mt-3">¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></p>
-          </div>
-        </div>
+    <form action="/register" method="POST" autocomplete="off">
+      <div class="mb-3">
+        <label for="nom_us" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nom_us" name="nom_us" required>
       </div>
-    </div>
+
+      <div class="mb-3">
+        <label for="mail_us" class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" id="mail_us" name="mail_us" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="pass_us" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="pass_us" name="pass_us" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="tel_us" class="form-label">Teléfono</label>
+        <input type="tel" class="form-control" id="tel_us" name="tel_us">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Dirección</label>
+        <div id="geocoder-container"></div>
+      </div>
+
+      <!-- Hidden inputs (rellenados por Mapbox) -->
+      <input type="hidden" name="calle" id="calle">
+      <input type="hidden" name="ciudad" id="ciudad">
+      <input type="hidden" name="region" id="region">
+      <input type="hidden" name="cod_postal" id="cod_postal">
+      <input type="hidden" name="pais" id="pais">
+
+      <button type="submit" class="btn btn-dark w-100 mt-3">Registrarse</button>
+    </form>
   </div>
 
-  <script src="/JS/register.js"></script>
+  <!-- JS de Mapbox -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script que inicializa Mapbox -->
+  <script src="/js/mapboxAddressAutocomplete.js"></script>
 </body>
 </html>
