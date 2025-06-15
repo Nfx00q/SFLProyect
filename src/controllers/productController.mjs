@@ -19,7 +19,7 @@ productController.list = async (req, res) => {
       LIMIT ? OFFSET ?
     `, [limit, offset]);
 
-    res.render('admin/products', {
+    res.render('admin/products/products', {
       data: productos,
       currentPage: page,
       totalPages
@@ -41,7 +41,7 @@ productController.create = async (req, res) => {
       await pool.query('INSERT INTO imagen_producto SET ?', nuevoImg);
     }
 
-    res.redirect('/admin/products');
+    res.redirect('/admin/products/products');
   } catch (err) {
     res.json(err);
   }
@@ -68,7 +68,7 @@ productController.update = async (req, res) => {
       await pool.query('DELETE FROM imagen_producto WHERE producto_id_producto = ?', [id]);
     }
 
-    res.redirect('/admin/products');
+    res.redirect('/admin/products/products');
   } catch (err) {
     res.json(err);
   }
@@ -80,7 +80,7 @@ productController.delete = async (req, res) => {
   try {
     await pool.query('DELETE FROM imagen_producto WHERE producto_id_producto = ?', [id]);
     await pool.query('DELETE FROM producto WHERE id_producto = ?', [id]);
-    res.redirect('/admin/products');
+    res.redirect('/admin/products/products');
   } catch (err) {
     res.json(err);
   }

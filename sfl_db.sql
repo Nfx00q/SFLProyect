@@ -250,9 +250,6 @@ ALTER TABLE `carrito`
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`id_categoria`);
 
-ALTER TABLE `color`
-  ADD PRIMARY KEY (`id_color`);
-
 ALTER TABLE `direccion`
   ADD PRIMARY KEY (`id_direccion`),
   ADD KEY `usuario_id_us` (`usuario_id_us`);
@@ -314,8 +311,7 @@ ALTER TABLE `usuario`
 ALTER TABLE `variante_producto`
   ADD PRIMARY KEY (`id_var`),
   ADD KEY `producto_id_producto` (`producto_id_producto`),
-  ADD KEY `talla_id_talla` (`talla_id_talla`),
-  ADD KEY `color_id_color` (`color_id_color`);
+  ADD KEY `talla_id_talla` (`talla_id_talla`);
 
 
 ALTER TABLE `carrito`
@@ -323,9 +319,6 @@ ALTER TABLE `carrito`
 
 ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
-ALTER TABLE `color`
-  MODIFY `id_color` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `direccion`
   MODIFY `id_direccion` int(11) NOT NULL AUTO_INCREMENT;
@@ -413,9 +406,8 @@ ALTER TABLE `usuario`
 ALTER TABLE `variante_producto`
   ADD CONSTRAINT `variante_producto_ibfk_1` FOREIGN KEY (`producto_id_producto`) REFERENCES `producto` (`id_producto`),
   ADD CONSTRAINT `variante_producto_ibfk_2` FOREIGN KEY (`talla_id_talla`) REFERENCES `talla` (`id_talla`),
-  ADD CONSTRAINT `variante_producto_ibfk_3` FOREIGN KEY (`color_id_color`) REFERENCES `color` (`id_color`);
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET_CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET_CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET_COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

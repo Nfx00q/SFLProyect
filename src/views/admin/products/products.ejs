@@ -3,23 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <title>SFL Admin - Productos</title>
-    <link rel="stylesheet" href="../Styles/bootstrap.css" />
+    <link rel="stylesheet" href="/Styles/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
   <body class="p-4">
-    <div class="container">
-      <h1 class="mb-4">Productos</h1>
+    <div class="container mt-4">
+    <h2 class="fw-semibold border-bottom pb-2 mb-4">Gestión de Productos</h2>
 
-      <!-- Botón Crear -->
-      <button
-        class="btn btn-success mb-3"
-        data-bs-toggle="modal"
-        data-bs-target="#modalCreate"
-      >
-        Crear Producto
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalCreate">
+        <i class="fas fa-plus"></i> Nuevo Producto
       </button>
+    </div>
 
-      <table class="table table-striped align-middle">
-        <thead>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered align-middle text-center">
+        <thead class="table-dark">
           <tr>
             <th>ID</th>
             <th>Nombre</th>
@@ -32,59 +31,50 @@
         </thead>
         <tbody>
           <% data.forEach(producto => { %>
-          <tr>
-            <td><%= producto.id_producto %></td>
-            <td><%= producto.nom_producto %></td>
-            <td><%= producto.des_producto %></td>
-            <td>$<%= producto.precio_producto %></td>
-            <td><%= producto.categoria_id_categoria %></td>
-            <td>
-              <% if (producto.url_img) { %>
-              <img src="/Clothes/<%= producto.url_img %>" width="100px" />
-              <small><%= producto.url_img %></small>
-              <% } else { %> Sin imagen <% } %>
-            </td>
-            <td>
-              <div style="display: flex; gap: 5px">
-                <button
-                  class="btn btn-primary btn-sm"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalEdit"
-                  data-id="<%= producto.id_producto %>"
-                  data-nombre="<%= producto.nom_producto %>"
-                  data-descripcion="<%= producto.des_producto %>"
-                  data-precio="<%= producto.precio_producto %>"
-                  data-categoria="<%= producto.categoria_id_categoria %>"
-                  data-urlimg="<%= producto.url_img %>"
-                >
-                  Editar
-                </button>
-                <button
-                  class="btn btn-danger btn-sm"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalDelete"
-                  data-id="<%= producto.id_producto %>"
-                  data-nombre="<%= producto.nom_producto %>"
-                >
-                  Eliminar
-                </button>
-              </div>
-            </td>
-          </tr>
+            <tr>
+              <td><%= producto.id_producto %></td>
+              <td><%= producto.nom_producto %></td>
+              <td><%= producto.des_producto %></td>
+              <td>$<%= producto.precio_producto %></td>
+              <td><%= producto.categoria_id_categoria %></td>
+              <td>
+                <% if (producto.url_img) { %>
+                  <img src="/Clothes/<%= producto.url_img %>" class="img-thumbnail" style="width: 60px;">
+                <% } else { %>
+                  <span class="text-muted">Sin imagen</span>
+                <% } %>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-primary"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalEdit"
+                          data-id="<%= producto.id_producto %>"
+                          data-nombre="<%= producto.nom_producto %>"
+                          data-descripcion="<%= producto.des_producto %>"
+                          data-precio="<%= producto.precio_producto %>"
+                          data-categoria="<%= producto.categoria_id_categoria %>"
+                          data-urlimg="<%= producto.url_img %>">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalDelete"
+                          data-id="<%= producto.id_producto %>"
+                          data-nombre="<%= producto.nom_producto %>">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                  <a href="/admin/products/variants/<%= producto.id_producto %>" class="btn btn-secondary">
+                    <i class="fas fa-tags"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
           <% }) %>
         </tbody>
       </table>
-
-      <nav class="mt-4">
-        <ul class="pagination justify-content-center">
-          <% for(let i = 1; i <= totalPages; i++) { %>
-          <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-          </li>
-          <% } %>
-        </ul>
-      </nav>
     </div>
+  </div>
 
     <!-- Modal Crear -->
     <div
