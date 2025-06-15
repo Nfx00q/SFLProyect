@@ -405,7 +405,7 @@ ALTER TABLE `usuario`
 
 ALTER TABLE `variante_producto`
   ADD CONSTRAINT `variante_producto_ibfk_1` FOREIGN KEY (`producto_id_producto`) REFERENCES `producto` (`id_producto`),
-  ADD CONSTRAINT `variante_producto_ibfk_2` FOREIGN KEY (`talla_id_talla`) REFERENCES `talla` (`id_talla`),
+  ADD CONSTRAINT `variante_producto_ibfk_2` FOREIGN KEY (`talla_id_talla`) REFERENCES `talla` (`id_talla`);
 COMMIT;
 
 /*!40101 SET_CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
