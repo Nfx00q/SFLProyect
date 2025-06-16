@@ -53,7 +53,7 @@ app.use(methodOverride('_method'));
 
 // Routes
 app.use("/", homeRoutes);
-app.use("/catalog", checkUsuarioActivo, catalogRoutes);
+app.use("/catalog", catalogRoutes);
 app.use("/register", registerRoutes);
 app.use("/login", loginRoutes);
 app.use("/logout", loginRoutes);
