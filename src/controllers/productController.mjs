@@ -68,7 +68,7 @@ productController.update = async (req, res) => {
       await pool.query('DELETE FROM imagen_producto WHERE producto_id_producto = ?', [id]);
     }
 
-    res.redirect('/admin/products/products');
+    res.redirect('/admin/products');
   } catch (err) {
     res.json(err);
   }
@@ -85,5 +85,23 @@ productController.delete = async (req, res) => {
     res.json(err);
   }
 };
+
+export async function getProducts(req, res) {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  const [productos] = await pool.query('SELECT * FROM producto LIMIT ? OFFSET ?', [limit, offset]);
+  const [[{ count }]] = await pool.query('SELECT COUNT(*) as count FROM producto');
+
+  const totalPages = Math.ceil(count / limit);
+
+  res.render('admin/products', {
+    data: productos,
+    currentPage: page,
+    totalPages
+  });
+}
+
 
 export default productController;

@@ -1,0 +1,65 @@
+<%- include('./partials/header', { title: 'Mi Carrito' }) %>
+
+    <div class="container mt-5">
+        <h2 class="mb-4"><i class="fas fa-shopping-cart"></i> Mi Carrito</h2>
+
+        <% if (carrito.length===0) { %>
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle"></i> Tu carrito está vacío.
+            </div>
+            <% } else { %>
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Talla</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let total=0; %>
+                            <% carrito.forEach(item=> {
+                                const subtotal = Number(item.precio) * item.cantidad;
+                                total += subtotal;
+                                %>
+                                <tr class="text-center">
+                                    <td>
+                                        <%= item.nom_producto %>
+                                    </td>
+                                    <td>
+                                        <%= item.nom_talla %>
+                                    </td>
+                                    <td>
+                                        <%= item.cantidad %>
+                                    </td>
+                                    <td>$<%= Number(item.precio).toFixed(0) %>
+                                    </td>
+                                    <td>$<%= subtotal.toFixed(0) %>
+                                    </td>
+                                    <td>
+                                        <a href="/shop-cart/remove/<%= item.id %>" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Quitar
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                    </tbody>
+                    <tfoot class="table-dark">
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>Total:</strong></td>
+                            <td colspan="2">$<%= total.toFixed(0) %>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="text-end mt-3">
+                    <a href="/checkout" class="btn btn-success">Proceder al Pago</a>
+                </div>
+                <% } %>
+    </div>
+
+    <%- include('./partials/footer') %>

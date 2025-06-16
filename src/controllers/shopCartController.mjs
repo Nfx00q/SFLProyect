@@ -80,7 +80,31 @@ shopCartController.addToCart = async (req, res) => {
   }
 };
 
+shopCartController.getCartCount = async (req, res) => {
+  if (!req.session.usuario) {
+    return res.json({ count: 0 });
+  }
 
+  try {
+    const [carritoRows] = await pool.query(
+      'SELECT id_carrito FROM carrito WHERE usuario_id_us = ? AND es_carrito = 1',
+      [req.session.usuario.id]
+    );
+
+    if (carritoRows.length === 0) return res.json({ count: 0 });
+
+    const carritoId = carritoRows[0].id_carrito;
+    const [productos] = await pool.query(
+      'SELECT SUM(cantidad) AS total FROM producto_carrito WHERE carrito_id_carrito = ?',
+      [carritoId]
+    );
+
+    res.json({ count: productos[0].total || 0 });
+  } catch (err) {
+    console.error('Error al obtener conteo del carrito:', err);
+    res.json({ count: 0 });
+  }
+};
 
 // Obtener tallas disponibles para un producto
 shopCartController.getTallasPorProducto = async (req, res) => {
@@ -101,6 +125,104 @@ shopCartController.getTallasPorProducto = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener tallas' });
   }
 };
+
+shopCartController.mostrarCarrito = async (req, res) => {
+  if (!req.session.usuario) {
+    return res.redirect('/login');
+  }
+
+  const userId = req.session.usuario.id;
+
+  try {
+    const [carritoRows] = await pool.query(
+      `SELECT id_carrito FROM carrito 
+       WHERE usuario_id_us = ? AND es_carrito = 1`,
+      [userId]
+    );
+
+    if (carritoRows.length === 0) {
+      return res.render('cart', { carrito: [] });
+    }
+
+    const carritoId = carritoRows[0].id_carrito;
+
+    const [productos] = await pool.query(
+      `SELECT pc.*, vp.precio_var AS precio, p.nom_producto, t.nom_talla
+       FROM producto_carrito pc
+       JOIN variante_producto vp ON pc.variante_producto_id_var = vp.id_var
+       JOIN producto p ON vp.producto_id_producto = p.id_producto
+       JOIN talla t ON vp.talla_id_talla = t.id_talla
+       WHERE pc.carrito_id_carrito = ?`,
+      [carritoId]
+    );
+
+    res.render('cart', { carrito: productos });
+  } catch (error) {
+    console.error('Error al mostrar el carrito:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+};
+
+// Eliminar un producto del carrito
+shopCartController.removeFromCart = async (req, res) => {
+  const { id_producto_carrito } = req.params;
+
+  try {
+    await pool.query('DELETE FROM producto_carrito WHERE id = ?', [id_producto_carrito]);
+    res.redirect('/shop-cart');
+  } catch (error) {
+    console.error('❌ Error al eliminar producto del carrito:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+};
+
+// Vaciar el carrito completo de un usuario
+shopCartController.vaciarCarrito = async (req, res) => {
+  const { id_usuario } = req.params;
+
+  try {
+    const [carritos] = await pool.query(
+      'SELECT id_carrito FROM carrito WHERE usuario_id_us = ? AND es_carrito = 1',
+      [id_usuario]
+    );
+
+    if (carritos.length > 0) {
+      const carritoId = carritos[0].id_carrito;
+
+      await pool.query('DELETE FROM producto_carrito WHERE carrito_id_carrito = ?', [carritoId]);
+    }
+
+    res.redirect(`/admin/users/detail/${id_usuario}`);
+  } catch (err) {
+    console.error('Error al vaciar carrito:', err);
+    res.status(500).send('Error al vaciar carrito');
+  }
+};
+
+// Eliminar el carrito completamente (carrito + productos)
+shopCartController.eliminarCarrito = async (req, res) => {
+  const { id_usuario } = req.params;
+
+  try {
+    const [carritos] = await pool.query(
+      'SELECT id_carrito FROM carrito WHERE usuario_id_us = ? AND es_carrito = 1',
+      [id_usuario]
+    );
+
+    if (carritos.length > 0) {
+      const carritoId = carritos[0].id_carrito;
+
+      await pool.query('DELETE FROM producto_carrito WHERE carrito_id_carrito = ?', [carritoId]);
+      await pool.query('DELETE FROM carrito WHERE id_carrito = ?', [carritoId]);
+    }
+
+    res.redirect(`/admin/users/detail/${id_usuario}`);
+  } catch (err) {
+    console.error('Error al eliminar carrito:', err);
+    res.status(500).send('Error al eliminar carrito');
+  }
+};
+
 
 
 export default shopCartController;

@@ -36,10 +36,19 @@ async function getHomePage(req, res) {
 
     const carritoVacio = !req.session.cart || req.session.cart.length === 0;
 
+    const [carrito] = await pool.query(`
+      SELECT SUM(cantidad) AS total
+      FROM producto_carrito pc
+      JOIN carrito c ON pc.carrito_id_carrito = c.id_carrito
+      WHERE c.usuario_id_us = ? AND c.es_carrito = 1
+    `, [req.session.usuario?.id]);
+
+
     res.render("home", {
       categorias,
       carritoVacio,
       usuario: req.session.usuario || null,
+      totalCarrito: carrito[0]?.total || 0
     });
   } catch (err) {
     console.error('Error en getHomePage:', err);

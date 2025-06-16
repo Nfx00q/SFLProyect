@@ -1,128 +1,176 @@
 <%- include('../../partials/header', { title: 'Detalle de Usuario' }) %>
 
-<div class="container py-4">
-  <h1 class="mb-5 text-center">
-    <i class="fas fa-user-circle me-2"></i>Perfil de <%= usuario.nom_us %>
-  </h1>
+  <div class="container py-4">
+    <h1 class="mb-5 text-center">
+      <i class="fas fa-user-circle me-2"></i>Perfil de <%= usuario.nom_us %>
+    </h1>
 
-  <div class="row g-4">
-    <!-- Datos Personales -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title text-primary">
-            <i class="fas fa-id-card me-2"></i>Datos Personales
-          </h5>
-          <p><strong>Nombre:</strong> <%= usuario.nom_us %></p>
-          <p><strong>ID:</strong> <%= usuario.id_us %></p>
-          <p><strong>Email:</strong> <%= usuario.mail_us %></p>
-          <p><strong>Teléfono:</strong> +56 <%= usuario.tel_us || 'No registrado' %></p>
-          <p><strong>Rol:</strong> <%= rol?.nom_rol || 'Sin rol' %></p>
+    <div class="row g-4">
+      <!-- Datos Personales -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fas fa-id-card me-2"></i>Datos Personales
+            </h5>
+            <p><strong>Nombre:</strong>
+              <%= usuario.nom_us %>
+            </p>
+            <p><strong>ID:</strong>
+              <%= usuario.id_us %>
+            </p>
+            <p><strong>Email:</strong>
+              <%= usuario.mail_us %>
+            </p>
+            <p><strong>Teléfono:</strong> +56 <%= usuario.tel_us || 'No registrado' %>
+            </p>
+            <p><strong>Rol:</strong>
+              <%= rol?.nom_rol || 'Sin rol' %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dirección -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fas fa-map-marker-alt me-2"></i>Dirección
+            </h5>
+            <% if (direccion) { %>
+              <p><strong>Calle:</strong>
+                <%= direccion.calle %>
+              </p>
+              <p><strong>Ciudad:</strong>
+                <%= direccion.ciudad %>
+              </p>
+              <p><strong>Comuna:</strong>
+                <%= direccion.comuna %>
+              </p>
+              <p><strong>Región:</strong>
+                <%= direccion.region %>
+              </p>
+              <p><strong>Código Postal:</strong>
+                <%= direccion.cod_postal %>
+              </p>
+              <p><strong>País:</strong>
+                <%= direccion.pais %>
+              </p>
+              <% } else { %>
+                <p class="text-muted fst-italic">Sin dirección registrada</p>
+                <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carrito -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fas fa-shopping-cart me-2"></i>Carrito
+            </h5>
+            <% if (carrito?.length> 0) { %>
+              <ul class="list-group list-group-flush">
+                <% carrito.forEach(item=> { %>
+                  <li class="list-group-item d-flex flex-column">
+                    <span><i class="fas fa-box me-2"></i>ID: <%= item.id_carrito %></span>
+                    <small class="text-muted">
+                      <%= new Date(item.fec_carrito).toLocaleString() %>
+                    </small>
+                    <span class="badge bg-primary w-auto mt-1">
+                      <%= item.es_carrito %>
+                    </span>
+                  </li>
+                  <% }) %>
+              </ul>
+              <div class="text-center mt-3">
+                <a href="/shop-cart/admin/vaciar/<%= usuario.id_us %>" class="btn btn-warning btn-sm me-2">
+                  <i class="fas fa-trash-alt me-1"></i> Vaciar Carrito
+                </a>
+                <a href="/shop-cart/admin/eliminar/<%= usuario.id_us %>" class="btn btn-danger btn-sm"
+                  onclick="return confirm('¿Estás seguro de eliminar el carrito? Esta acción es irreversible.')">
+                  <i class="fas fa-times-circle me-1"></i> Eliminar Carrito
+                </a>
+              </div>
+
+              <% } else { %>
+                <p class="text-muted fst-italic">Carrito vacío</p>
+                <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pedidos -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fas fa-clipboard-list me-2"></i>Pedidos
+            </h5>
+            <% if (pedidos?.length> 0) { %>
+              <ul class="list-group list-group-flush">
+                <% pedidos.forEach(p=> { %>
+                  <li class="list-group-item">
+                    <p><i class="fas fa-receipt me-2"></i>ID: <%= p.id_pedido %>
+                    </p>
+                    <p><strong>Estado:</strong>
+                      <%= p.est_pedido %>
+                    </p>
+                    <p><strong>Total:</strong> $<%= p.total_pedido %>
+                    </p>
+                    <small class="text-muted">
+                      <%= new Date(p.hora_fecha).toLocaleString() %>
+                    </small>
+                  </li>
+                  <% }) %>
+              </ul>
+              <% } else { %>
+                <p class="text-muted fst-italic">Sin pedidos</p>
+                <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Envíos -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fas fa-truck me-2"></i>Envíos
+            </h5>
+            <% if (envios?.length> 0) { %>
+              <ul class="list-group list-group-flush">
+                <% envios.forEach(env=> { %>
+                  <li class="list-group-item">
+                    <p><i class="fas fa-shipping-fast me-2"></i>ID: <%= env.id_envio %>
+                    </p>
+                    <p><strong>Seguimiento:</strong>
+                      <%= env.num_segui %>
+                    </p>
+                    <p><strong>Transportista:</strong>
+                      <%= env.transp %>
+                    </p>
+                    <p><strong>Estado:</strong>
+                      <%= env.est_envio %>
+                    </p>
+                  </li>
+                  <% }) %>
+              </ul>
+              <% } else { %>
+                <p class="text-muted fst-italic">Sin envíos</p>
+                <% } %>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Dirección -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title text-primary">
-            <i class="fas fa-map-marker-alt me-2"></i>Dirección
-          </h5>
-          <% if (direccion) { %>
-            <p><strong>Calle:</strong> <%= direccion.calle %></p>
-            <p><strong>Ciudad:</strong> <%= direccion.ciudad %></p>
-            <p><strong>Comuna:</strong> <%= direccion.comuna %></p>
-            <p><strong>Región:</strong> <%= direccion.region %></p>
-            <p><strong>Código Postal:</strong> <%= direccion.cod_postal %></p>
-            <p><strong>País:</strong> <%= direccion.pais %></p>
-          <% } else { %>
-            <p class="text-muted fst-italic">Sin dirección registrada</p>
-          <% } %>
-        </div>
-      </div>
-    </div>
-
-    <!-- Carrito -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title text-primary">
-            <i class="fas fa-shopping-cart me-2"></i>Carrito
-          </h5>
-          <% if (carrito?.length > 0) { %>
-            <ul class="list-group list-group-flush">
-              <% carrito.forEach(item => { %>
-                <li class="list-group-item d-flex flex-column">
-                  <span><i class="fas fa-box me-2"></i>ID: <%= item.id_carrito %></span>
-                  <small class="text-muted"><%= new Date(item.fec_carrito).toLocaleString() %></small>
-                  <span class="badge bg-primary w-auto mt-1"><%= item.es_carrito %></span>
-                </li>
-              <% }) %>
-            </ul>
-          <% } else { %>
-            <p class="text-muted fst-italic">Carrito vacío</p>
-          <% } %>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pedidos -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title text-primary">
-            <i class="fas fa-clipboard-list me-2"></i>Pedidos
-          </h5>
-          <% if (pedidos?.length > 0) { %>
-            <ul class="list-group list-group-flush">
-              <% pedidos.forEach(p => { %>
-                <li class="list-group-item">
-                  <p><i class="fas fa-receipt me-2"></i>ID: <%= p.id_pedido %></p>
-                  <p><strong>Estado:</strong> <%= p.est_pedido %></p>
-                  <p><strong>Total:</strong> $<%= p.total_pedido %></p>
-                  <small class="text-muted"><%= new Date(p.hora_fecha).toLocaleString() %></small>
-                </li>
-              <% }) %>
-            </ul>
-          <% } else { %>
-            <p class="text-muted fst-italic">Sin pedidos</p>
-          <% } %>
-        </div>
-      </div>
-    </div>
-
-    <!-- Envíos -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title text-primary">
-            <i class="fas fa-truck me-2"></i>Envíos
-          </h5>
-          <% if (envios?.length > 0) { %>
-            <ul class="list-group list-group-flush">
-              <% envios.forEach(env => { %>
-                <li class="list-group-item">
-                  <p><i class="fas fa-shipping-fast me-2"></i>ID: <%= env.id_envio %></p>
-                  <p><strong>Seguimiento:</strong> <%= env.num_segui %></p>
-                  <p><strong>Transportista:</strong> <%= env.transp %></p>
-                  <p><strong>Estado:</strong> <%= env.est_envio %></p>
-                </li>
-              <% }) %>
-            </ul>
-          <% } else { %>
-            <p class="text-muted fst-italic">Sin envíos</p>
-          <% } %>
-        </div>
-      </div>
+    <div class="text-center mt-5">
+      <a href="/admin/users" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver a Usuarios
+      </a>
     </div>
   </div>
 
-  <div class="text-center mt-5">
-    <a href="/admin/users" class="btn btn-secondary">
-      <i class="fas fa-arrow-left me-2"></i>Volver a Usuarios
-    </a>
-  </div>
-</div>
-
-<%- include('../../partials/footer') %>
+  <%- include('../../partials/footer') %>
