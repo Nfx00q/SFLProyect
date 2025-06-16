@@ -21,6 +21,8 @@ import registerRoutes from "./routes/register.mjs";
 import adminProductsRoutes from "./routes/admin/products.mjs";
 import adminRoutes from './routes/admin/index.mjs';
 import adminUsersRoutes from './routes/admin/users.mjs';
+import shopCartRoutes from './routes/shopCart.mjs';
+import { check } from "express-validator";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,6 +46,7 @@ app.use(
     secret: "admin",
     resave: false,
     saveUninitialized: false,
+    cookie: { secure: false }
   })
 );
 
@@ -60,6 +63,7 @@ app.use("/logout", loginRoutes);
 app.use("/admin/products", checkUserExists, checkUsuarioActivo, isAdmin, adminProductsRoutes);
 app.use('/admin', checkUserExists, checkUsuarioActivo, isAdmin, adminRoutes);
 app.use('/admin/users', checkUserExists, checkUsuarioActivo, isAdmin, adminUsersRoutes);
+app.use('/shop-cart', checkUserExists, checkUsuarioActivo, shopCartRoutes);
 
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {

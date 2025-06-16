@@ -1,91 +1,85 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>SFL - Catalogo</title>
-    <style>
-      .product-card {
-        display: none;
-      } /* oculto por defecto, JS lo mostrará */
-    </style>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="Styles/bootstrap.css" />
-    <script
-      src="https://kit.fontawesome.com/65448a561c.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <title>SFL - Catalogo</title>
+  <style>
+    .product-card {
+      display: none;
+    }
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          <img src="Images/banner-image.png" alt="" width="120px" />
-        </a>
-        <button
-          class="navbar-toggler no-border-toggle"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarColor01"
-          aria-controls="navbarColor01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor01">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link active" id="sale-link" href="#"
-                >Ofertas
-                <span class="visually-hidden">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Temporada</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Catalogo</a>
-            </li>
-          </ul>
-        </div>
+    /* oculto por defecto, JS lo mostrará */
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="Styles/bootstrap.css" />
+  <script src="https://kit.fontawesome.com/65448a561c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="Images/banner-image.png" alt="" width="120px" />
+      </a>
+      <button class="navbar-toggler no-border-toggle" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" id="sale-link" href="#">Ofertas
+              <span class="visually-hidden">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Temporada</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Catalogo</a>
+          </li>
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <div class="container py-5">
-      <div style="display: block; text-align: center;">
-        <img src="Images/catalog-image.png" alt="" width="200px">
-      </div>
+  <div class="container py-5">
+    <div style="display: block; text-align: center;">
+      <img src="Images/catalog-image.png" alt="" width="200px">
+    </div>
 
-      <!-- Filtro de categoría -->
-      <div class="mb-4">
-        <label for="categoryFilter" class="form-label"
-          >Filtrar por categoría:</label
-        >
-        <select class="form-select" id="categoryFilter">
-          <option value="all">Todas las categorías</option>
-          <% Object.keys(categorias).forEach(catId => { %>
+    <!-- Filtro de categoría -->
+    <div class="mb-4">
+      <label for="categoryFilter" class="form-label">Filtrar por categoría:</label>
+      <select class="form-select" id="categoryFilter">
+        <option value="all">Todas las categorías</option>
+        <% Object.keys(categorias).forEach(catId=> { %>
           <option value="cat-<%= catId %>">
             <%= categorias[catId].nombre %>
           </option>
           <% }) %>
-        </select>
-      </div>
+      </select>
+    </div>
 
-      <!-- Tarjetas de productos -->
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-        <% Object.keys(categorias).forEach(catId => { const cat =
+    <!-- Tarjetas de productos -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      <% Object.keys(categorias).forEach(catId=> { const cat =
         categorias[catId]; cat.productos.forEach(producto => { %>
         <div class="col product-card cat-<%= catId %>">
           <div class="card h-100">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title"><%= producto.nombre %></h5>
-              <p class="card-text text-muted"><%= producto.descripcion %></p>
+              <h5 class="card-title">
+                <%= producto.nombre %>
+              </h5>
+              <p class="card-text text-muted">
+                <%= producto.descripcion %>
+              </p>
               <p class="card-text fw-bold mt-auto">
                 $<%= producto.precio.toFixed(0) %>
               </p>
@@ -96,44 +90,90 @@
           </div>
         </div>
         <% }) }) %>
-      </div>
     </div>
+  </div>
 
-    <!-- Scripts -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const filter = document.getElementById("categoryFilter");
-        const cards = document.querySelectorAll(".product-card");
+  <!-- Scripts -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const filter = document.getElementById("categoryFilter");
+      const cards = document.querySelectorAll(".product-card");
 
-        const showCards = (category) => {
-          cards.forEach((card) => {
-            if (category === "all" || card.classList.contains(category)) {
-              card.style.display = "block";
-            } else {
-              card.style.display = "none";
-            }
-          });
-        };
-
-        filter.addEventListener("change", () => {
-          showCards(filter.value);
+      const showCards = (category) => {
+        cards.forEach((card) => {
+          if (category === "all" || card.classList.contains(category)) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
         });
+      };
 
-        // Mostrar todas al inicio
-        showCards("all");
+      filter.addEventListener("change", () => {
+        showCards(filter.value);
       });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
-  <footer
-    class="bg-light text-center text-muted py-4 mt-5 no-border-toggle fixed-bottom"
-  >
-    <div class="container">
-      <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
-      <p class="mb-0">
-        <a href="#" class="text-muted me-3">Términos</a>
-        <a href="#" class="text-muted">Privacidad</a>
-      </p>
+
+      // Mostrar todas al inicio
+      showCards("all");
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modal Agregar al Carrito -->
+  <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="formAgregarCarrito" method="POST">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCarritoLabel">Agregar al carrito</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="producto_id" id="producto_id" />
+
+            <div class="mb-3">
+              <label for="talla" class="form-label">Talla</label>
+              <select class="form-select" name="talla" id="talla" required>
+                <option disabled selected>Seleccione una talla</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="cantidad" class="form-label">Cantidad</label>
+              <input type="number" class="form-control" name="cantidad" id="cantidad" min="1" value="1" required />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button 
+              class="btn btn-success btn-sm" 
+              onclick="abrirModalCarrito('<%= producto.id_producto %>')" 
+              data-bs-toggle="modal" 
+              data-bs-target="#modalCarrito">
+              <i class="fas fa-cart-plus"></i> Añadir al carrito
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-  </footer>
+  </div>
+
+  <script src="/JS/cart.js"></script>
+
+</body>
+<footer class="bg-light text-center text-muted py-4 mt-5 no-border-toggle fixed-bottom">
+  <div class="container">
+    <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
+    <p class="mb-0">
+      <a href="#" class="text-muted me-3">Términos</a>
+      <a href="#" class="text-muted">Privacidad</a>
+    </p>
+  </div>
+</footer>
+
 </html>

@@ -26,10 +26,10 @@ export async function login(req, res) {
     }
 
     req.session.usuario = {
-      id: usuario.id_us,
-      nombre: usuario.nom_us,
-      correo: usuario.mail_us,
-      rol: usuario.rol_id_rol,
+      id: usuario.id_us, // ✅ cambia 'id' a 'id_us'
+      nom: usuario.nom_us,
+      mail: usuario.mail_us,
+      rol: Number(usuario.rol_id_rol),
     };
 
     logger.info(`Inicio de sesión exitoso para el usuario: ` + usuario.mail_us);

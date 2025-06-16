@@ -1,166 +1,181 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SFL - Inicio</title>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="Styles/bootstrap.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SFL - Inicio</title>
 
-    <link rel="stylesheet" href="Styles/home.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="Styles/bootstrap.css" />
 
-    <script
-      src="https://kit.fontawesome.com/65448a561c.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
+  <link rel="stylesheet" href="Styles/home.css" />
 
-  <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          <img src="Images/banner-image.png" alt="" width="120px" />
-        </a>
-        <button
-          class="navbar-toggler no-border-toggle"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarColor01"
-          aria-controls="navbarColor01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor01">
-          <ul class="navbar-nav me-auto">
+  <script src="https://kit.fontawesome.com/65448a561c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="Images/banner-image.png" alt="" width="120px" />
+      </a>
+      <button class="navbar-toggler no-border-toggle" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" id="sale-link" href="#">Ofertas
+              <span class="visually-hidden">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Temporada</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/catalog">Catalogo</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <% if (!usuario) { %>
             <li class="nav-item">
-              <a class="nav-link active" id="sale-link" href="#"
-                >Ofertas
-                <span class="visually-hidden">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Temporada</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/catalog">Catalogo</a>
-            </li>
-          </ul>
-          <ul class="navbar-nav ms-auto">
-            <% if (!usuario) { %>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="/login"
-                title="Iniciar sesión"
-                style="color: green"
-              >
+              <a class="nav-link" href="/login" title="Iniciar sesión" style="color: green">
                 <i class="fas fa-sign-in-alt"></i> Iniciar sesion
               </a>
             </li>
             <% } else { %>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="/logout"
-                title="Cerrar sesión"
-                style="color: indianred"
-              >
-                <i class="fas fa-sign-out-alt"></i> Cerrar sesion
-              </a>
-            </li>
-            <% } %>
-          </ul>
-        </div>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout" title="Cerrar sesión" style="color: indianred">
+                  <i class="fas fa-sign-out-alt"></i> Cerrar sesion
+                </a>
+              </li>
+              <% } %>
+        </ul>
       </div>
-    </nav>
-
-    <div class="portrait-image">
-      <img src="Images/portrait-image.png" alt="" width="100%" />
     </div>
+  </nav>
 
-    <figure class="fad-section">
-      <div style="display: block; text-align: center; margin-bottom: 10px">
-        <h1>Ultimas prendas (Novedades)</h1>
-      </div>
-    </figure>
-    <div class="accordion" id="accordionExample">
-      <% Object.keys(categorias).forEach((catId, index) => { const cat =
+  <div class="portrait-image">
+    <img src="Images/portrait-image.png" alt="" width="100%" />
+  </div>
+
+  <figure class="fad-section">
+    <div style="display: block; text-align: center; margin-bottom: 10px">
+      <h1>Ultimas prendas (Novedades)</h1>
+    </div>
+  </figure>
+  <div class="accordion" id="accordionExample">
+    <% Object.keys(categorias).forEach((catId, index)=> { const cat =
       categorias[catId]; const collapseId = `collapse${index + 1}`; const
       headingId = `heading${index + 1}`; %>
       <div class="accordion-item">
         <h2 class="accordion-header" id="<%= headingId %>">
-          <button
-            class="accordion-button <%= index === 0 ? '' : 'collapsed' %>"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#<%= collapseId %>"
-            aria-expanded="<%= index === 0 ? 'true' : 'false' %>"
-            aria-controls="<%= collapseId %>"
-          >
+          <button class="accordion-button <%= index === 0 ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse"
+            data-bs-target="#<%= collapseId %>" aria-expanded="<%= index === 0 ? 'true' : 'false' %>"
+            aria-controls="<%= collapseId %>">
             <%= cat.nombre %>
           </button>
         </h2>
-        <div
-          id="<%= collapseId %>"
-          class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>"
-          aria-labelledby="<%= headingId %>"
-          data-bs-parent="#accordionExample"
-        >
+        <div id="<%= collapseId %>" class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>"
+          aria-labelledby="<%= headingId %>" data-bs-parent="#accordionExample">
           <div class="accordion-body">
-            <div
-              class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4"
-            >
-              <% if(cat.productos.length === 0) { %>
-              <p>No hay productos en esta categoría.</p>
-              <% } else { %> <% cat.productos.forEach(producto => { %>
-              <div class="col">
-                <div class="card h-100">
-                  <% if (producto.url_img) { %>
-                    <img
-                      src="/Clothes/<%= producto.url_img %>"
-                      class="card-img-top"
-                      alt="Imagen de <%= producto.nombre %>"
-                      style="width: 100%; max-height: 300px; object-fit: contain"
-                    />
-                  <% } %>
-                  <div class="card-body d-flex flex-column">
-                    <h5 class="card-title"><%= producto.nombre %></h5>
-                    <p class="card-text flex-grow-1">
-                      <%= producto.descripcion %>
-                    </p>
-                    <p class="card-text fw-bold">
-                      $<%= producto.precio.toFixed(0) %>
-                    </p>
-                    <button type="submit" class="btn btn-primary">
-                      <i class="fas fa-shopping-cart"></i> Agregar al carrito
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <% }) %> <% } %>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+              <% if(cat.productos.length===0) { %>
+                <p>No hay productos en esta categoría.</p>
+                <% } else { %>
+                  <% cat.productos.forEach(producto=> { %>
+                    <div class="col">
+                      <div class="card h-100">
+                        <% if (producto.url_img) { %>
+                          <img src="/Clothes/<%= producto.url_img %>" class="card-img-top"
+                            alt="Imagen de <%= producto.nombre %>"
+                            style="width: 100%; max-height: 300px; object-fit: contain" />
+                          <% } %>
+                            <div class="card-body d-flex flex-column">
+                              <h5 class="card-title">
+                                <%= producto.nombre %>
+                              </h5>
+                              <p class="card-text flex-grow-1">
+                                <%= producto.descripcion %>
+                              </p>
+                              <p class="card-text fw-bold">
+                                $<%= producto.precio.toFixed(0) %>
+                              </p>
+                              <button type="button" class="btn btn-success btn-sm"
+                                onclick="abrirModalCarrito('<%= producto.id_producto %>')" data-bs-toggle="modal"
+                                data-bs-target="#modalCarrito">
+                                <i class="fas fa-cart-plus"></i> Añadir al carrito
+                              </button>
+
+
+                            </div>
+                      </div>
+                    </div>
+                    <% }) %>
+                      <% } %>
             </div>
           </div>
         </div>
       </div>
       <% }) %>
+  </div>
+
+  <!-- Modal Agregar al Carrito -->
+  <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="formAgregarCarrito" method="POST">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCarritoLabel">Agregar al carrito</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="id_producto" id="id_producto" />
+
+            <div class="mb-3">
+              <label for="talla" class="form-label">Talla</label>
+              <select class="form-select" name="talla" id="talla" required>
+                <option disabled selected>Seleccione una talla</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+              </select>
+            </div>
+
+            <div class="mb-1">
+              <label for="cantidad" class="form-label">Cantidad</label>
+              <input type="number" class="form-control" name="cantidad" id="cantidad" min="1" value="1" required />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success w-100">
+              <i class="fas fa-cart-plus"></i> Confirmar
+            </button>
+          </div>
+
+        </div>
+      </form>
     </div>
-  </body>
-  <footer
-    class="bg-light text-center text-muted py-4 mt-5 no-border-toggle fixed-bottom"
-  >
-    <div class="container">
-      <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
-      <p class="mb-0">
-        <a href="#" class="text-muted me-3">Términos</a>
-        <a href="#" class="text-muted">Privacidad</a>
-      </p>
-    </div>
-  </footer>
+  </div>
+
+  <script src="/JS/cart.js"></script>
+</body>
+<footer class="bg-light text-center text-muted py-4 mt-5 no-border-toggle fixed-bottom">
+  <div class="container">
+    <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
+    <p class="mb-0">
+      <a href="#" class="text-muted me-3">Términos</a>
+      <a href="#" class="text-muted">Privacidad</a>
+    </p>
+  </div>
+</footer>
+
 </html>

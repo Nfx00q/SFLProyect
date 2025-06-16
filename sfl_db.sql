@@ -18,6 +18,10 @@ CREATE TABLE `carrito` (
   `usuario_id_us` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `carrito`;
+INSERT INTO `carrito` (`id_carrito`, `fec_carrito`, `es_carrito`, `usuario_id_us`) VALUES
+(1, '2025-06-15 22:07:32', '1', 1);
+
 DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE `categoria` (
   `id_categoria` int(11) NOT NULL,
@@ -25,6 +29,7 @@ CREATE TABLE `categoria` (
   `des_categoria` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `categoria`;
 INSERT INTO `categoria` (`id_categoria`, `nom_categoria`, `des_categoria`) VALUES
 (1, 'Poleras', 'Poleras para toda ocasión'),
 (2, 'Pantalones', 'Variedad de pantalones'),
@@ -46,6 +51,10 @@ CREATE TABLE `direccion` (
   `pais` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `direccion`;
+INSERT INTO `direccion` (`id_direccion`, `usuario_id_us`, `calle`, `ciudad`, `region`, `cod_postal`, `pais`) VALUES
+(0, 1, '2114 Cerro Tronador', 'Puente Alto', 'Santiago Metropolitan Region', '8150000', 'Chile');
+
 DROP TABLE IF EXISTS `envio`;
 CREATE TABLE `envio` (
   `id_envio` int(11) NOT NULL,
@@ -55,12 +64,14 @@ CREATE TABLE `envio` (
   `est_envio` varchar(50) DEFAULT 'preparando'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `envio`;
 DROP TABLE IF EXISTS `estado_usuario`;
 CREATE TABLE `estado_usuario` (
   `id_est` int(11) NOT NULL,
   `nom_est` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `estado_usuario`;
 INSERT INTO `estado_usuario` (`id_est`, `nom_est`) VALUES
 (1, 'activo'),
 (2, 'inactivo'),
@@ -73,6 +84,7 @@ CREATE TABLE `imagen_producto` (
   `url_img` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `imagen_producto`;
 INSERT INTO `imagen_producto` (`id_img`, `producto_id_producto`, `url_img`) VALUES
 (54, 1, '001.png'),
 (55, 2, '002.png'),
@@ -91,6 +103,7 @@ CREATE TABLE `pago` (
   `monto_pago` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `pago`;
 DROP TABLE IF EXISTS `pedido`;
 CREATE TABLE `pedido` (
   `id_pedido` int(11) NOT NULL,
@@ -100,6 +113,7 @@ CREATE TABLE `pedido` (
   `hora_fecha` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `pedido`;
 DROP TABLE IF EXISTS `producto`;
 CREATE TABLE `producto` (
   `id_producto` int(11) NOT NULL,
@@ -109,6 +123,7 @@ CREATE TABLE `producto` (
   `categoria_id_categoria` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `producto`;
 INSERT INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_producto`, `categoria_id_categoria`) VALUES
 (1, 'Polera Minimall 1', 'Diseño minimalista en algodón', 11990.00, 1),
 (2, 'Polera Minimal 2', 'Diseño minimalista en algodón', 11990.00, 1),
@@ -173,8 +188,14 @@ CREATE TABLE `producto_carrito` (
   `precio` decimal(10,2) DEFAULT NULL,
   `cantidad` int(11) DEFAULT 1,
   `carrito_id_carrito` int(11) NOT NULL,
-  `producto_id_producto` int(11) NOT NULL
+  `producto_id_producto` int(11) NOT NULL,
+  `variante_producto_id_var` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+TRUNCATE TABLE `producto_carrito`;
+INSERT INTO `producto_carrito` (`id`, `precio`, `cantidad`, `carrito_id_carrito`, `producto_id_producto`, `variante_producto_id_var`) VALUES
+(6, 19990.00, 1, 1, 1, 1),
+(7, 29000.00, 2, 1, 5, 3);
 
 DROP TABLE IF EXISTS `producto_pedido`;
 CREATE TABLE `producto_pedido` (
@@ -185,6 +206,7 @@ CREATE TABLE `producto_pedido` (
   `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `producto_pedido`;
 DROP TABLE IF EXISTS `reg_usuario`;
 CREATE TABLE `reg_usuario` (
   `id_reg` int(11) NOT NULL,
@@ -193,6 +215,7 @@ CREATE TABLE `reg_usuario` (
   `fec_reg` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `reg_usuario`;
 DROP TABLE IF EXISTS `resenia_producto`;
 CREATE TABLE `resenia_producto` (
   `id_resenia` int(11) NOT NULL,
@@ -205,12 +228,14 @@ CREATE TABLE `resenia_producto` (
   `fecha_resenia` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `resenia_producto`;
 DROP TABLE IF EXISTS `rol`;
 CREATE TABLE `rol` (
   `id_rol` int(11) NOT NULL,
   `nom_rol` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `rol`;
 INSERT INTO `rol` (`id_rol`, `nom_rol`) VALUES
 (1, 'admin'),
 (2, 'cliente'),
@@ -221,6 +246,15 @@ CREATE TABLE `talla` (
   `id_talla` int(11) NOT NULL,
   `nom_talla` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+TRUNCATE TABLE `talla`;
+INSERT INTO `talla` (`id_talla`, `nom_talla`) VALUES
+(1, 'XS'),
+(2, 'S'),
+(3, 'M'),
+(4, 'L'),
+(5, 'XL'),
+(6, 'XXL');
 
 DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE `usuario` (
@@ -233,6 +267,12 @@ CREATE TABLE `usuario` (
   `tel_us` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+TRUNCATE TABLE `usuario`;
+INSERT INTO `usuario` (`id_us`, `nom_us`, `mail_us`, `pass_us`, `rol_id_rol`, `id_est`, `tel_us`) VALUES
+(1, 'Benjamin Belmar', 'babgutierrez.135@gmail.com', '$2b$10$pt8upPi8wdJ7ebK84Ia4v.DPNLs4Ks4nI1wqAnZLuqqaIrXoHLfnG', 2, 1, 922208860),
+(2, 'Denisse Orellana', 'denisse@moderator.com', '$2b$10$qF6y.0GYK7Gr0gMKE0wtD.si6ZP4gp3FnvvlPIP//InVz3VS.6V2.', 1, 1, NULL),
+(4, 'Jack Sparrow', 'jacksparrow@gmail.com', '$2b$10$XV2B9w9JEuhr3ZhPvEbVr.8iBwBpmuB.rMKfJkZaHS6n8bWGp9nkG', 3, 1, NULL);
+
 DROP TABLE IF EXISTS `variante_producto`;
 CREATE TABLE `variante_producto` (
   `id_var` int(11) NOT NULL,
@@ -241,6 +281,12 @@ CREATE TABLE `variante_producto` (
   `stock_var` int(11) NOT NULL,
   `precio_var` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+TRUNCATE TABLE `variante_producto`;
+INSERT INTO `variante_producto` (`id_var`, `producto_id_producto`, `talla_id_talla`, `stock_var`, `precio_var`) VALUES
+(1, 1, 4, 100, 19990.00),
+(2, 2, 4, 100, 12990.00),
+(3, 5, 6, 121, 29000.00);
 
 
 ALTER TABLE `carrito`
@@ -254,20 +300,8 @@ ALTER TABLE `direccion`
   ADD PRIMARY KEY (`id_direccion`),
   ADD KEY `usuario_id_us` (`usuario_id_us`);
 
-ALTER TABLE `envio`
-  ADD PRIMARY KEY (`id_envio`),
-  ADD KEY `pedido_id_pedido` (`pedido_id_pedido`);
-
 ALTER TABLE `estado_usuario`
   ADD PRIMARY KEY (`id_est`);
-
-ALTER TABLE `imagen_producto`
-  ADD PRIMARY KEY (`id_img`),
-  ADD KEY `producto_id_producto` (`producto_id_producto`);
-
-ALTER TABLE `pago`
-  ADD PRIMARY KEY (`id_pago`),
-  ADD KEY `pedido_id_pedido` (`pedido_id_pedido`);
 
 ALTER TABLE `pedido`
   ADD PRIMARY KEY (`id_pedido`),
@@ -278,29 +312,10 @@ ALTER TABLE `producto`
   ADD KEY `categoria_id_categoria` (`categoria_id_categoria`);
 
 ALTER TABLE `producto_carrito`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `carrito_id_carrito` (`carrito_id_carrito`),
-  ADD KEY `producto_id_producto` (`producto_id_producto`);
-
-ALTER TABLE `producto_pedido`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pedido_id_pedido` (`pedido_id_pedido`),
-  ADD KEY `producto_id_producto` (`producto_id_producto`);
-
-ALTER TABLE `reg_usuario`
-  ADD PRIMARY KEY (`id_reg`),
-  ADD KEY `usuario_id_us` (`usuario_id_us`);
-
-ALTER TABLE `resenia_producto`
-  ADD PRIMARY KEY (`id_resenia`),
-  ADD KEY `usuario_id_us` (`usuario_id_us`),
-  ADD KEY `producto_id_producto` (`producto_id_producto`);
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `rol`
   ADD PRIMARY KEY (`id_rol`);
-
-ALTER TABLE `talla`
-  ADD PRIMARY KEY (`id_talla`);
 
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id_us`),
@@ -309,28 +324,14 @@ ALTER TABLE `usuario`
   ADD KEY `fk_estado_usuario` (`id_est`);
 
 ALTER TABLE `variante_producto`
-  ADD PRIMARY KEY (`id_var`),
-  ADD KEY `producto_id_producto` (`producto_id_producto`),
-  ADD KEY `talla_id_talla` (`talla_id_talla`);
+  ADD PRIMARY KEY (`id_var`);
 
 
 ALTER TABLE `carrito`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
-ALTER TABLE `direccion`
-  MODIFY `id_direccion` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `envio`
-  MODIFY `id_envio` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `imagen_producto`
-  MODIFY `id_img` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
-
-ALTER TABLE `pago`
-  MODIFY `id_pago` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `pedido`
   MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT;
@@ -339,44 +340,20 @@ ALTER TABLE `producto`
   MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 ALTER TABLE `producto_carrito`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `producto_pedido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `reg_usuario`
-  MODIFY `id_reg` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `resenia_producto`
-  MODIFY `id_resenia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 ALTER TABLE `rol`
   MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
-ALTER TABLE `talla`
-  MODIFY `id_talla` int(11) NOT NULL AUTO_INCREMENT;
-
 ALTER TABLE `usuario`
-  MODIFY `id_us` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_us` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `variante_producto`
-  MODIFY `id_var` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_var` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 
 ALTER TABLE `carrito`
   ADD CONSTRAINT `carrito_ibfk_1` FOREIGN KEY (`usuario_id_us`) REFERENCES `usuario` (`id_us`);
-
-ALTER TABLE `direccion`
-  ADD CONSTRAINT `direccion_ibfk_1` FOREIGN KEY (`usuario_id_us`) REFERENCES `usuario` (`id_us`) ON DELETE CASCADE;
-
-ALTER TABLE `envio`
-  ADD CONSTRAINT `envio_ibfk_1` FOREIGN KEY (`pedido_id_pedido`) REFERENCES `pedido` (`id_pedido`);
-
-ALTER TABLE `imagen_producto`
-  ADD CONSTRAINT `imagen_producto_ibfk_1` FOREIGN KEY (`producto_id_producto`) REFERENCES `producto` (`id_producto`);
-
-ALTER TABLE `pago`
-  ADD CONSTRAINT `pago_ibfk_1` FOREIGN KEY (`pedido_id_pedido`) REFERENCES `pedido` (`id_pedido`);
 
 ALTER TABLE `pedido`
   ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`usuario_id_us`) REFERENCES `usuario` (`id_us`);
@@ -384,30 +361,11 @@ ALTER TABLE `pedido`
 ALTER TABLE `producto`
   ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`categoria_id_categoria`) REFERENCES `categoria` (`id_categoria`);
 
-ALTER TABLE `producto_carrito`
-  ADD CONSTRAINT `producto_carrito_ibfk_1` FOREIGN KEY (`carrito_id_carrito`) REFERENCES `carrito` (`id_carrito`),
-  ADD CONSTRAINT `producto_carrito_ibfk_2` FOREIGN KEY (`producto_id_producto`) REFERENCES `producto` (`id_producto`);
-
-ALTER TABLE `producto_pedido`
-  ADD CONSTRAINT `producto_pedido_ibfk_1` FOREIGN KEY (`pedido_id_pedido`) REFERENCES `pedido` (`id_pedido`),
-  ADD CONSTRAINT `producto_pedido_ibfk_2` FOREIGN KEY (`producto_id_producto`) REFERENCES `producto` (`id_producto`);
-
-ALTER TABLE `reg_usuario`
-  ADD CONSTRAINT `reg_usuario_ibfk_1` FOREIGN KEY (`usuario_id_us`) REFERENCES `usuario` (`id_us`);
-
-ALTER TABLE `resenia_producto`
-  ADD CONSTRAINT `resenia_producto_ibfk_1` FOREIGN KEY (`usuario_id_us`) REFERENCES `usuario` (`id_us`),
-  ADD CONSTRAINT `resenia_producto_ibfk_2` FOREIGN KEY (`producto_id_producto`) REFERENCES `producto` (`id_producto`);
-
 ALTER TABLE `usuario`
   ADD CONSTRAINT `fk_estado_usuario` FOREIGN KEY (`id_est`) REFERENCES `estado_usuario` (`id_est`),
   ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`rol_id_rol`) REFERENCES `rol` (`id_rol`);
-
-ALTER TABLE `variante_producto`
-  ADD CONSTRAINT `variante_producto_ibfk_1` FOREIGN KEY (`producto_id_producto`) REFERENCES `producto` (`id_producto`),
-  ADD CONSTRAINT `variante_producto_ibfk_2` FOREIGN KEY (`talla_id_talla`) REFERENCES `talla` (`id_talla`);
 COMMIT;
 
-/*!40101 SET_CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET_CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET_COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
