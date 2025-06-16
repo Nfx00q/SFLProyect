@@ -18,10 +18,6 @@ CREATE TABLE `carrito` (
   `usuario_id_us` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `carrito`;
-INSERT INTO `carrito` (`id_carrito`, `fec_carrito`, `es_carrito`, `usuario_id_us`) VALUES
-(1, '2025-06-15 22:07:32', '1', 1);
-
 DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE `categoria` (
   `id_categoria` int(11) NOT NULL,
@@ -50,10 +46,6 @@ CREATE TABLE `direccion` (
   `cod_postal` varchar(20) NOT NULL,
   `pais` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-TRUNCATE TABLE `direccion`;
-INSERT INTO `direccion` (`id_direccion`, `usuario_id_us`, `calle`, `ciudad`, `region`, `cod_postal`, `pais`) VALUES
-(0, 1, '2114 Cerro Tronador', 'Puente Alto', 'Santiago Metropolitan Region', '8150000', 'Chile');
 
 DROP TABLE IF EXISTS `envio`;
 CREATE TABLE `envio` (
@@ -192,11 +184,6 @@ CREATE TABLE `producto_carrito` (
   `variante_producto_id_var` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `producto_carrito`;
-INSERT INTO `producto_carrito` (`id`, `precio`, `cantidad`, `carrito_id_carrito`, `producto_id_producto`, `variante_producto_id_var`) VALUES
-(6, 19990.00, 1, 1, 1, 1),
-(7, 29000.00, 2, 1, 5, 3);
-
 DROP TABLE IF EXISTS `producto_pedido`;
 CREATE TABLE `producto_pedido` (
   `id` int(11) NOT NULL,
@@ -247,15 +234,6 @@ CREATE TABLE `talla` (
   `nom_talla` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `talla`;
-INSERT INTO `talla` (`id_talla`, `nom_talla`) VALUES
-(1, 'XS'),
-(2, 'S'),
-(3, 'M'),
-(4, 'L'),
-(5, 'XL'),
-(6, 'XXL');
-
 DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE `usuario` (
   `id_us` int(11) NOT NULL,
@@ -267,12 +245,6 @@ CREATE TABLE `usuario` (
   `tel_us` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `usuario`;
-INSERT INTO `usuario` (`id_us`, `nom_us`, `mail_us`, `pass_us`, `rol_id_rol`, `id_est`, `tel_us`) VALUES
-(1, 'Benjamin Belmar', 'babgutierrez.135@gmail.com', '$2b$10$pt8upPi8wdJ7ebK84Ia4v.DPNLs4Ks4nI1wqAnZLuqqaIrXoHLfnG', 2, 1, 922208860),
-(2, 'Denisse Orellana', 'denisse@moderator.com', '$2b$10$qF6y.0GYK7Gr0gMKE0wtD.si6ZP4gp3FnvvlPIP//InVz3VS.6V2.', 1, 1, NULL),
-(4, 'Jack Sparrow', 'jacksparrow@gmail.com', '$2b$10$XV2B9w9JEuhr3ZhPvEbVr.8iBwBpmuB.rMKfJkZaHS6n8bWGp9nkG', 3, 1, NULL);
-
 DROP TABLE IF EXISTS `variante_producto`;
 CREATE TABLE `variante_producto` (
   `id_var` int(11) NOT NULL,
@@ -281,12 +253,6 @@ CREATE TABLE `variante_producto` (
   `stock_var` int(11) NOT NULL,
   `precio_var` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-TRUNCATE TABLE `variante_producto`;
-INSERT INTO `variante_producto` (`id_var`, `producto_id_producto`, `talla_id_talla`, `stock_var`, `precio_var`) VALUES
-(1, 1, 4, 100, 19990.00),
-(2, 2, 4, 100, 12990.00),
-(3, 5, 6, 121, 29000.00);
 
 
 ALTER TABLE `carrito`
@@ -340,7 +306,16 @@ ALTER TABLE `producto`
   MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 ALTER TABLE `producto_carrito`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `producto_pedido`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `reg_usuario`
+  MODIFY `id_reg` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `resenia_producto`
+  MODIFY `id_resenia` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `rol`
   MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
@@ -349,7 +324,7 @@ ALTER TABLE `usuario`
   MODIFY `id_us` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `variante_producto`
-  MODIFY `id_var` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_var` int(11) NOT NULL AUTO_INCREMENT;
 
 
 ALTER TABLE `carrito`

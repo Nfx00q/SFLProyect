@@ -113,67 +113,21 @@
         showCards(filter.value);
       });
 
-      // Mostrar todas al inicio
-      showCards("all");
-    });
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Modal Agregar al Carrito -->
-  <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <form id="formAgregarCarrito" method="POST">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalCarritoLabel">Agregar al carrito</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" name="producto_id" id="producto_id" />
-
-            <div class="mb-3">
-              <label for="talla" class="form-label">Talla</label>
-              <select class="form-select" name="talla" id="talla" required>
-                <option disabled selected>Seleccione una talla</option>
-                <option value="XS">XS</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-                <option value="XXL">XXL</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="cantidad" class="form-label">Cantidad</label>
-              <input type="number" class="form-control" name="cantidad" id="cantidad" min="1" value="1" required />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button 
-              class="btn btn-success btn-sm" 
-              onclick="abrirModalCarrito('<%= producto.id_producto %>')" 
-              data-bs-toggle="modal" 
-              data-bs-target="#modalCarrito">
-              <i class="fas fa-cart-plus"></i> Añadir al carrito
-            </button>
-          </div>
-        </div>
-      </form>
+        // Mostrar todas al inicio
+        showCards("all");
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  <footer
+    class="bg-light text-center text-muted py-4 mt-5 no-border-toggle fixed-bottom"
+  >
+    <div class="container">
+      <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
+      <p class="mb-0">
+        <a href="#" class="text-muted me-3">Términos</a>
+        <a href="#" class="text-muted">Privacidad</a>
+      </p>
     </div>
-  </div>
-
-  <script src="/JS/cart.js"></script>
-
-</body>
-<footer class="bg-light text-center text-muted py-4 mt-5 no-border-toggle fixed-bottom">
-  <div class="container">
-    <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
-    <p class="mb-0">
-      <a href="#" class="text-muted me-3">Términos</a>
-      <a href="#" class="text-muted">Privacidad</a>
-    </p>
-  </div>
-</footer>
-
+  </footer>
 </html>
