@@ -1,4 +1,4 @@
-import { compareSync } from 'bcryptjs';
+import { compareSync } from 'bcrypt';
 import { pool } from '../database.mjs';
 import logger from '../utils/logger.mjs';
 
@@ -26,7 +26,7 @@ export async function login(req, res) {
     }
 
     req.session.usuario = {
-      id: usuario.id_us, // ✅ cambia 'id' a 'id_us'
+      id: usuario.id_us,
       nom: usuario.nom_us,
       mail: usuario.mail_us,
       rol: Number(usuario.rol_id_rol),

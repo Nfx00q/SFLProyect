@@ -1,4 +1,4 @@
-import { hashSync } from 'bcryptjs';
+import { hashSync } from 'bcrypt';
 import logger from '../utils/logger.mjs';
 import { pool } from '../database.mjs';
 

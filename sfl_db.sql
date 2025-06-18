@@ -18,7 +18,6 @@ CREATE TABLE `carrito` (
   `usuario_id_us` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `carrito`;
 DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE `categoria` (
   `id_categoria` int(11) NOT NULL,
@@ -26,8 +25,7 @@ CREATE TABLE `categoria` (
   `des_categoria` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `categoria`;
-INSERT INTO `categoria` (`id_categoria`, `nom_categoria`, `des_categoria`) VALUES
+INSERT DELAYED IGNORE INTO `categoria` (`id_categoria`, `nom_categoria`, `des_categoria`) VALUES
 (1, 'Poleras', 'Poleras para toda ocasión'),
 (2, 'Pantalones', 'Variedad de pantalones'),
 (3, 'Chaquetas', 'Chaquetas para el invierno'),
@@ -44,10 +42,6 @@ CREATE TABLE `direccion` (
   `pais` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `direccion`;
-INSERT INTO `direccion` (`id_direccion`, `usuario_id_us`, `calle`, `ciudad`, `region`, `cod_postal`, `pais`) VALUES
-(0, 1, '2114 Cerro Tronador', 'Puente Alto', 'Santiago Metropolitan Region', '8150000', 'Chile');
-
 DROP TABLE IF EXISTS `envio`;
 CREATE TABLE `envio` (
   `id_envio` int(11) NOT NULL,
@@ -57,15 +51,13 @@ CREATE TABLE `envio` (
   `est_envio` varchar(50) DEFAULT 'preparando'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `envio`;
 DROP TABLE IF EXISTS `estado_usuario`;
 CREATE TABLE `estado_usuario` (
   `id_est` int(11) NOT NULL,
   `nom_est` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `estado_usuario`;
-INSERT INTO `estado_usuario` (`id_est`, `nom_est`) VALUES
+INSERT DELAYED IGNORE INTO `estado_usuario` (`id_est`, `nom_est`) VALUES
 (1, 'activo'),
 (2, 'inactivo'),
 (3, 'suspendido');
@@ -77,8 +69,7 @@ CREATE TABLE `imagen_producto` (
   `url_img` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `imagen_producto`;
-INSERT INTO `imagen_producto` (`id_img`, `producto_id_producto`, `url_img`) VALUES
+INSERT DELAYED IGNORE INTO `imagen_producto` (`id_img`, `producto_id_producto`, `url_img`) VALUES
 (91, 1, '001.png'),
 (92, 2, '002.png'),
 (93, 3, '003.png'),
@@ -118,7 +109,6 @@ CREATE TABLE `pago` (
   `monto_pago` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `pago`;
 DROP TABLE IF EXISTS `pedido`;
 CREATE TABLE `pedido` (
   `id_pedido` int(11) NOT NULL,
@@ -128,7 +118,6 @@ CREATE TABLE `pedido` (
   `hora_fecha` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `pedido`;
 DROP TABLE IF EXISTS `producto`;
 CREATE TABLE `producto` (
   `id_producto` int(11) NOT NULL,
@@ -138,8 +127,7 @@ CREATE TABLE `producto` (
   `categoria_id_categoria` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `producto`;
-INSERT INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_producto`, `categoria_id_categoria`) VALUES
+INSERT DELAYED IGNORE INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_producto`, `categoria_id_categoria`) VALUES
 (1, 'Polera Minimall 1', 'Diseño minimalista en algodón', 11990.00, 1),
 (2, 'Polera Minimal 2', 'Diseño minimalista en algodón', 11990.00, 1),
 (3, 'Polera Art 1', 'Diseño artístico exclusivo', 13990.00, 1),
@@ -180,7 +168,6 @@ CREATE TABLE `producto_carrito` (
   `variante_producto_id_var` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `producto_carrito`;
 DROP TABLE IF EXISTS `producto_pedido`;
 CREATE TABLE `producto_pedido` (
   `id` int(11) NOT NULL,
@@ -190,7 +177,6 @@ CREATE TABLE `producto_pedido` (
   `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `producto_pedido`;
 DROP TABLE IF EXISTS `reg_usuario`;
 CREATE TABLE `reg_usuario` (
   `id_reg` int(11) NOT NULL,
@@ -199,28 +185,13 @@ CREATE TABLE `reg_usuario` (
   `fec_reg` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `reg_usuario`;
-DROP TABLE IF EXISTS `resenia_producto`;
-CREATE TABLE `resenia_producto` (
-  `id_resenia` int(11) NOT NULL,
-  `usuario_id_us` int(11) NOT NULL,
-  `producto_id_producto` int(11) NOT NULL,
-  `calidad_prod` int(11) DEFAULT NULL CHECK (`calidad_prod` between 1 and 5),
-  `creatividad_prod` int(11) DEFAULT NULL CHECK (`creatividad_prod` between 1 and 5),
-  `estilo_prod` int(11) DEFAULT NULL CHECK (`estilo_prod` between 1 and 5),
-  `comentario` text DEFAULT NULL,
-  `fecha_resenia` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-TRUNCATE TABLE `resenia_producto`;
 DROP TABLE IF EXISTS `rol`;
 CREATE TABLE `rol` (
   `id_rol` int(11) NOT NULL,
   `nom_rol` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `rol`;
-INSERT INTO `rol` (`id_rol`, `nom_rol`) VALUES
+INSERT DELAYED IGNORE INTO `rol` (`id_rol`, `nom_rol`) VALUES
 (1, 'admin'),
 (2, 'cliente'),
 (3, 'vendedor');
@@ -231,8 +202,7 @@ CREATE TABLE `talla` (
   `nom_talla` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `talla`;
-INSERT INTO `talla` (`id_talla`, `nom_talla`) VALUES
+INSERT DELAYED IGNORE INTO `talla` (`id_talla`, `nom_talla`) VALUES
 (1, 'XS'),
 (2, 'S'),
 (3, 'M'),
@@ -251,8 +221,7 @@ CREATE TABLE `usuario` (
   `tel_us` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `usuario`;
-INSERT INTO `usuario` (`id_us`, `nom_us`, `mail_us`, `pass_us`, `rol_id_rol`, `id_est`, `tel_us`) VALUES
+INSERT DELAYED IGNORE INTO `usuario` (`id_us`, `nom_us`, `mail_us`, `pass_us`, `rol_id_rol`, `id_est`, `tel_us`) VALUES
 (1, 'Benjamin Belmar', 'babgutierrez.135@gmail.com', '$2b$10$pt8upPi8wdJ7ebK84Ia4v.DPNLs4Ks4nI1wqAnZLuqqaIrXoHLfnG', 2, 1, 922208860),
 (2, 'Denisse Orellana', 'denisse@moderator.com', '$2b$10$qF6y.0GYK7Gr0gMKE0wtD.si6ZP4gp3FnvvlPIP//InVz3VS.6V2.', 1, 1, NULL),
 (4, 'Jack Sparrow', 'jacksparrow@gmail.com', '$2b$10$XV2B9w9JEuhr3ZhPvEbVr.8iBwBpmuB.rMKfJkZaHS6n8bWGp9nkG', 3, 1, NULL);
@@ -266,7 +235,6 @@ CREATE TABLE `variante_producto` (
   `precio_var` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TRUNCATE TABLE `variante_producto`;
 
 ALTER TABLE `carrito`
   ADD PRIMARY KEY (`id_carrito`),
@@ -315,6 +283,9 @@ ALTER TABLE `carrito`
 ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
+ALTER TABLE `direccion`
+  MODIFY `id_direccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 ALTER TABLE `imagen_producto`
   MODIFY `id_img` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
@@ -331,7 +302,7 @@ ALTER TABLE `rol`
   MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 ALTER TABLE `usuario`
-  MODIFY `id_us` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_us` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 ALTER TABLE `variante_producto`
   MODIFY `id_var` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;

@@ -23,8 +23,12 @@ if (container) {
       if (el) el.value = value || '';
     };
 
+    const calleCompleta = e.result.address
+    ? `${e.result.text} ${e.result.address}`
+    : e.result.text;
+
+    set('calle', calleCompleta);
     set('direccion', place);
-    set('calle', e.result.text);
     set('ciudad', getContext(ctx, 'place'));
     set('region', getContext(ctx, 'region'));
     set('cod_postal', getContext(ctx, 'postcode'));
