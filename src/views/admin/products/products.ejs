@@ -9,17 +9,16 @@
 </head>
 
 <body class="p-4">
-  <div class="container mt-4">
-    <h2 class="fw-semibold border-bottom pb-2 mb-4">Gestión de Productos</h2>
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-semibold">Gestión de Productos</h2>
       <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalCreate">
         <i class="fas fa-plus"></i> Nuevo Producto
       </button>
     </div>
 
     <div class="table-responsive">
-      <table class="table table-hover table-bordered align-middle text-center">
+      <table class="table table-striped table-hover align-middle text-center">
         <thead class="table-dark">
           <tr>
             <th>ID</th>
@@ -32,39 +31,35 @@
           </tr>
         </thead>
         <tbody>
-          <% data.forEach(producto=> { %>
+          <% data.forEach(producto => { %>
             <tr>
-              <td>
-                <%= producto.id_producto %>
-              </td>
-              <td>
-                <%= producto.nom_producto %>
-              </td>
-              <td>
-                <%= producto.des_producto %>
-              </td>
-              <td>$<%= producto.precio_producto %>
-              </td>
-              <td>
-                <%= producto.categoria_id_categoria %>
-              </td>
+              <td><%= producto.id_producto %></td>
+              <td><%= producto.nom_producto %></td>
+              <td><%= producto.des_producto %></td>
+              <td><span class="badge bg-success">$<%= producto.precio_producto %></span></td>
+              <td><%= producto.categoria_id_categoria %></td>
               <td>
                 <% if (producto.url_img) { %>
                   <img src="/Clothes/<%= producto.url_img %>" class="img-thumbnail" style="width: 60px;">
-                  <% } else { %>
-                    <span class="text-muted">Sin imagen</span>
-                    <% } %>
+                  <div><small><%= producto.url_img %></small></div>
+                <% } else { %>
+                  <span class="text-muted">Sin imagen</span>
+                <% } %>
               </td>
               <td>
                 <div class="btn-group btn-group-sm">
                   <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEdit"
-                    data-id="<%= producto.id_producto %>" data-nombre="<%= producto.nom_producto %>"
-                    data-descripcion="<%= producto.des_producto %>" data-precio="<%= producto.precio_producto %>"
-                    data-categoria="<%= producto.categoria_id_categoria %>" data-urlimg="<%= producto.url_img %>">
+                    data-id="<%= producto.id_producto %>"
+                    data-nombre="<%= producto.nom_producto %>"
+                    data-descripcion="<%= producto.des_producto %>"
+                    data-precio="<%= producto.precio_producto %>"
+                    data-categoria="<%= producto.categoria_id_categoria %>"
+                    data-urlimg="<%= producto.url_img %>">
                     <i class="fas fa-edit"></i>
                   </button>
                   <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete"
-                    data-id="<%= producto.id_producto %>" data-nombre="<%= producto.nom_producto %>">
+                    data-id="<%= producto.id_producto %>"
+                    data-nombre="<%= producto.nom_producto %>">
                     <i class="fas fa-trash-alt"></i>
                   </button>
                   <a href="/admin/products/variants/<%= producto.id_producto %>" class="btn btn-secondary">
@@ -73,22 +68,20 @@
                 </div>
               </td>
             </tr>
-            <% }) %>
+          <% }) %>
         </tbody>
       </table>
-      <nav>
-        <ul class="pagination justify-content-center mt-4">
-          <% for (let i=1; i <=totalPages; i++) { %>
-            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-              <a class="page-link" href="?page=<%= i %>">
-                <%= i %>
-              </a>
-            </li>
-            <% } %>
-        </ul>
-      </nav>
-
     </div>
+
+    <nav>
+      <ul class="pagination justify-content-center mt-4">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
   </div>
 
   <!-- Modal Crear -->

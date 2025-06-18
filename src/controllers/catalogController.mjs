@@ -3,9 +3,17 @@ import { pool } from '../database.mjs';
 export async function getCatalogPage(req, res) {
   try {
     const sql = `
-      SELECT c.id_categoria, c.nom_categoria, p.nom_producto, p.des_producto, p.precio_producto
+      SELECT 
+        c.id_categoria,
+        c.nom_categoria,
+        p.id_producto,
+        p.nom_producto,
+        p.des_producto,
+        p.precio_producto,
+        i.url_img
       FROM categoria c
       LEFT JOIN producto p ON c.id_categoria = p.categoria_id_categoria
+      LEFT JOIN imagen_producto i ON p.id_producto = i.producto_id_producto
       ORDER BY c.id_categoria, p.id_producto
     `;
 
@@ -21,9 +29,11 @@ export async function getCatalogPage(req, res) {
       }
       if (row.nom_producto) {
         categorias[row.id_categoria].productos.push({
+          id_producto: row.id_producto,
           nombre: row.nom_producto,
           descripcion: row.des_producto,
-          precio: Number(row.precio_producto) // Convertir a número para evitar errores en la vista
+          precio: Number(row.precio_producto),
+          url_img: row.url_img // 👈 ahora sí pasas la imagen
         });
       }
     });

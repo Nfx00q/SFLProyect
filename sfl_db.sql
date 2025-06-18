@@ -31,11 +31,7 @@ INSERT INTO `categoria` (`id_categoria`, `nom_categoria`, `des_categoria`) VALUE
 (1, 'Poleras', 'Poleras para toda ocasión'),
 (2, 'Pantalones', 'Variedad de pantalones'),
 (3, 'Chaquetas', 'Chaquetas para el invierno'),
-(4, 'Accesorios', 'Gorros, bufandas y más'),
-(9, 'Zapatillas', 'Calzado urbano y deportivo'),
-(11, 'Oversize', 'Estilo holgado y moderno'),
-(12, 'Ropa Formal', 'Camisas, blazers y más para ocasiones elegantes'),
-(14, 'Sudaderas', 'Comodidad para el día a día');
+(9, 'Zapatillas', 'Calzado urbano y deportivo');
 
 DROP TABLE IF EXISTS `direccion`;
 CREATE TABLE `direccion` (
@@ -83,15 +79,35 @@ CREATE TABLE `imagen_producto` (
 
 TRUNCATE TABLE `imagen_producto`;
 INSERT INTO `imagen_producto` (`id_img`, `producto_id_producto`, `url_img`) VALUES
-(54, 1, '001.png'),
-(55, 2, '002.png'),
-(56, 3, '003.png'),
-(57, 4, '004.png'),
-(58, 5, '006.png'),
-(59, 6, '007.png'),
-(60, 7, '009.png'),
-(0, 8, '010.png'),
-(0, 9, '015.png');
+(91, 1, '001.png'),
+(92, 2, '002.png'),
+(93, 3, '003.png'),
+(94, 4, '004.png'),
+(95, 5, '005.png'),
+(96, 6, '006.png'),
+(97, 7, '007.png'),
+(98, 8, '008.png'),
+(99, 9, '009.png'),
+(101, 11, '011.png'),
+(102, 12, '012.png'),
+(103, 13, '013.png'),
+(104, 14, '014.png'),
+(105, 15, '015.png'),
+(106, 16, '016.png'),
+(107, 17, '017.png'),
+(108, 18, '018.png'),
+(109, 19, '019.png'),
+(110, 24, '024.png'),
+(111, 25, '021.png'),
+(112, 26, '022.png'),
+(113, 27, '023.png'),
+(114, 28, '025.png'),
+(115, 29, '026.png'),
+(116, 30, '027.png'),
+(117, 42, '028.png'),
+(118, 43, '029.png'),
+(119, 44, '031.png'),
+(120, 45, '034.png');
 
 DROP TABLE IF EXISTS `pago`;
 CREATE TABLE `pago` (
@@ -133,53 +149,26 @@ INSERT INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_p
 (7, 'Polera Urbana', 'Estilo urbano impreso', 12990.00, 1),
 (8, 'Polera Oldschool', 'Diseño retro', 12990.00, 1),
 (9, 'Polera Estampada', 'Estampado original', 13990.00, 1),
-(10, 'Polera Skull', 'Con calavera vintage', 13990.00, 1),
-(11, 'Jeans Skinny', 'Jeans ajustado', 19990.00, 2),
-(12, 'Jogger Negro', 'Cómodo y moderno', 17990.00, 2),
-(13, 'Pantalón Cargo Verde', 'Táctico y urbano', 20990.00, 2),
-(14, 'Pantalón Recto', 'Estilo clásico', 18990.00, 2),
-(15, 'Jeans Azul', 'Línea casual', 17990.00, 2),
-(16, 'Pantalón Roto', 'Estilo destroyer', 19990.00, 2),
-(17, 'Jogger Urbano', 'Diseño streetwear', 18990.00, 2),
-(18, 'Pantalón Beige', 'Estilo neutro', 18990.00, 2),
-(19, 'Pantalón Oversize', 'Amplio y cómodo', 20990.00, 2),
-(41, 'Polera Básica Blanca', 'Poleras para toda ocasión', 15000.00, 1),
-(43, 'Polera Manga Larga', 'Poleras para toda ocasión', 20000.00, 1),
-(44, 'Polera Deportiva', 'Poleras para toda ocasión', 22000.00, 1),
-(45, 'Polera Oversize', 'Poleras para toda ocasión', 25000.00, 1),
-(46, 'Pantalón Jeans Azul', 'Variedad de pantalones', 30000.00, 2),
-(47, 'Pantalón de Tela', 'Variedad de pantalones', 28000.00, 2),
-(48, 'Pantalón Cargo', 'Variedad de pantalones', 32000.00, 2),
-(49, 'Pantalón Chino', 'Variedad de pantalones', 31000.00, 2),
-(50, 'Pantalón Deportivo', 'Variedad de pantalones', 27000.00, 2),
-(51, 'Chaqueta de Invierno Negra', 'Chaquetas para el invierno', 45000.00, 3),
-(52, 'Chaqueta Rompeviento', 'Chaquetas para el invierno', 40000.00, 3),
-(53, 'Chaqueta con Capucha', 'Chaquetas para el invierno', 42000.00, 3),
-(54, 'Chaqueta de Cuero', 'Chaquetas para el invierno', 55000.00, 3),
-(55, 'Chaqueta Acolchada', 'Chaquetas para el invierno', 48000.00, 3),
-(56, 'Gorro de Lana', 'Gorros, bufandas y más', 8000.00, 4),
-(57, 'Bufanda de Algodón', 'Gorros, bufandas y más', 9000.00, 4),
-(58, 'Guantes Térmicos', 'Gorros, bufandas y más', 7000.00, 4),
-(59, 'Cinturón de Cuero', 'Gorros, bufandas y más', 15000.00, 4),
-(60, 'Sombrero Panamá', 'Gorros, bufandas y más', 12000.00, 4),
-(66, 'Zapatillas Urbanas Negras', 'Calzado urbano y deportivo', 60000.00, 9),
-(67, 'Zapatillas Running', 'Calzado urbano y deportivo', 65000.00, 9),
-(68, 'Zapatillas Basket', 'Calzado urbano y deportivo', 70000.00, 9),
-(69, 'Zapatillas Casual', 'Calzado urbano y deportivo', 55000.00, 9),
-(70, 'Zapatillas de Entrenamiento', 'Calzado urbano y deportivo', 62000.00, 9),
-(71, 'Polera Oversize Blanca', 'Estilo holgado y moderno', 18000.00, 11),
-(72, 'Sudadera Oversize', 'Estilo holgado y moderno', 25000.00, 11),
-(73, 'Chaqueta Oversize', 'Estilo holgado y moderno', 40000.00, 11),
-(75, 'Camiseta Oversize Estampada', 'Estilo holgado y moderno', 20000.00, 11),
-(76, 'Camisa Formal Blanca', 'Camisas, blazers y más para ocasiones elegantes', 35000.00, 12),
-(77, 'Blazer Azul Marino', 'Camisas, blazers y más para ocasiones elegantes', 55000.00, 12),
-(78, 'Pantalón Formal Negro', 'Camisas, blazers y más para ocasiones elegantes', 40000.00, 12),
-(79, 'Vestido Formal', 'Camisas, blazers y más para ocasiones elegantes', 60000.00, 12),
-(80, 'Corbata Clásica', 'Camisas, blazers y más para ocasiones elegantes', 10000.00, 12),
-(81, 'Sudadera Básica', 'Comodidad para el día a día', 22000.00, 14),
-(82, 'Sudadera con Capucha', 'Comodidad para el día a día', 26000.00, 14),
-(83, 'Sudadera Deportiva', 'Comodidad para el día a día', 28000.00, 14),
-(85, 'Sudadera con Diseño', 'Comodidad para el día a día', 25000.00, 14);
+(11, 'Buzo boogy', 'Estilo 8ball', 19990.00, 2),
+(12, 'Buzo boogy', 'Estilo calabera', 17990.00, 2),
+(13, 'Buzo boogy', 'Estilo happy face', 20990.00, 2),
+(14, 'Buzo boogy', 'Estilo artistico', 18990.00, 2),
+(15, 'Buzo boogy', 'Estilo tiger', 17990.00, 2),
+(16, 'Buzo boogy', 'Estilo butterfly', 19990.00, 2),
+(17, 'Buzo boogy', 'Estilo wings', 18990.00, 2),
+(18, 'Buzo boogy', 'Estilo hawk', 18990.00, 2),
+(19, 'Buzo boogy', 'Estilo rose', 20990.00, 2),
+(24, 'Chaqueta winter', 'Estilo blackout', 30000.00, 3),
+(25, 'Chaqueta winter', 'Estilo brown', 28000.00, 3),
+(26, 'Chaqueta winter', 'Estilo darkblue', 32000.00, 3),
+(27, 'Chaqueta winter', 'Estilo cappuccino', 31000.00, 3),
+(28, 'Chaqueta winter', 'Estilo marca original / Brown', 27000.00, 3),
+(29, 'Chaqueta winter', 'Estilo darkgreen', 45000.00, 3),
+(30, 'Chaqueta winter', 'Estilo light cream', 40000.00, 3),
+(42, 'Zapatillas runner', 'Estilo runner black', 55000.00, 9),
+(43, 'Zapatillas training', 'Calzado deportivo', 62000.00, 9),
+(44, 'Zapatillas runner', 'Estilo black and red', 59000.00, 9),
+(45, 'Zapatillas tracking', 'Estilo terreno / Black', 65000.00, 9);
 
 DROP TABLE IF EXISTS `producto_carrito`;
 CREATE TABLE `producto_carrito` (
@@ -278,11 +267,6 @@ CREATE TABLE `variante_producto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 TRUNCATE TABLE `variante_producto`;
-INSERT INTO `variante_producto` (`id_var`, `producto_id_producto`, `talla_id_talla`, `stock_var`, `precio_var`) VALUES
-(1, 1, 4, 100, 19990.00),
-(2, 2, 4, 100, 12990.00),
-(3, 5, 6, 121, 29000.00);
-
 
 ALTER TABLE `carrito`
   ADD PRIMARY KEY (`id_carrito`),
@@ -297,6 +281,9 @@ ALTER TABLE `direccion`
 
 ALTER TABLE `estado_usuario`
   ADD PRIMARY KEY (`id_est`);
+
+ALTER TABLE `imagen_producto`
+  ADD PRIMARY KEY (`id_img`);
 
 ALTER TABLE `pedido`
   ADD PRIMARY KEY (`id_pedido`),
@@ -327,6 +314,9 @@ ALTER TABLE `carrito`
 
 ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+ALTER TABLE `imagen_producto`
+  MODIFY `id_img` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 ALTER TABLE `pedido`
   MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT;

@@ -80,7 +80,7 @@ productController.delete = async (req, res) => {
   try {
     await pool.query('DELETE FROM imagen_producto WHERE producto_id_producto = ?', [id]);
     await pool.query('DELETE FROM producto WHERE id_producto = ?', [id]);
-    res.redirect('/admin/products/products');
+    res.redirect('/admin/products');
   } catch (err) {
     res.json(err);
   }
