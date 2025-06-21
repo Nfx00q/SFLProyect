@@ -57,7 +57,11 @@
                 </table>
 
                 <div class="text-end mt-3">
-                    <a href="/checkout" class="btn btn-success">Proceder al Pago</a>
+                    <form action="/payment/checkout" method="POST">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-credit-card"></i> Pagar ahora
+                        </button>
+                    </form>
                 </div>
                 <% } %>
     </div>

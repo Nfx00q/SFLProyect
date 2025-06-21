@@ -9,9 +9,7 @@ import { isAdmin } from './middlewares/auth.mjs';
 import methodOverride from 'method-override';
 import { checkUserExists } from './middlewares/checkUserExists.mjs';
 import { checkUsuarioActivo } from './middlewares/checkUserActive.mjs';
-
-// Importar la conexión desde database.mjs
-import { pool } from "./database.mjs";
+import dotenv from 'dotenv';
 
 // Importar rutas (usando import también)
 import homeRoutes from "./routes/home.mjs";
@@ -22,12 +20,15 @@ import adminProductsRoutes from "./routes/admin/products.mjs";
 import adminRoutes from './routes/admin/index.mjs';
 import adminUsersRoutes from './routes/admin/users.mjs';
 import shopCartRoutes from './routes/shopCart.mjs';
-import { check } from "express-validator";
+import paymentRoutes from './routes/payment.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Cargar variables de entorno
+dotenv.config();
 
 // Settings
 app.set("port", process.env.PORT || 3000);
@@ -64,6 +65,7 @@ app.use("/admin/products", checkUserExists, checkUsuarioActivo, isAdmin, adminPr
 app.use('/admin', checkUserExists, checkUsuarioActivo, isAdmin, adminRoutes);
 app.use('/admin/users', checkUserExists, checkUsuarioActivo, isAdmin, adminUsersRoutes);
 app.use('/shop-cart', checkUserExists, checkUsuarioActivo, shopCartRoutes);
+app.use('/payment', paymentRoutes);
 
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
