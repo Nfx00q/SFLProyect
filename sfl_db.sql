@@ -18,6 +18,9 @@ CREATE TABLE `carrito` (
   `usuario_id_us` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `carrito` (`id_carrito`, `fec_carrito`, `es_carrito`, `usuario_id_us`) VALUES
+(3, NULL, '1', 1);
+
 DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE `categoria` (
   `id_categoria` int(11) NOT NULL,
@@ -25,7 +28,7 @@ CREATE TABLE `categoria` (
   `des_categoria` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT DELAYED IGNORE INTO `categoria` (`id_categoria`, `nom_categoria`, `des_categoria`) VALUES
+INSERT INTO `categoria` (`id_categoria`, `nom_categoria`, `des_categoria`) VALUES
 (1, 'Poleras', 'Poleras para toda ocasión'),
 (2, 'Pantalones', 'Variedad de pantalones'),
 (3, 'Chaquetas', 'Chaquetas para el invierno'),
@@ -57,7 +60,7 @@ CREATE TABLE `estado_usuario` (
   `nom_est` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT DELAYED IGNORE INTO `estado_usuario` (`id_est`, `nom_est`) VALUES
+INSERT INTO `estado_usuario` (`id_est`, `nom_est`) VALUES
 (1, 'activo'),
 (2, 'inactivo'),
 (3, 'suspendido');
@@ -69,7 +72,7 @@ CREATE TABLE `imagen_producto` (
   `url_img` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT DELAYED IGNORE INTO `imagen_producto` (`id_img`, `producto_id_producto`, `url_img`) VALUES
+INSERT INTO `imagen_producto` (`id_img`, `producto_id_producto`, `url_img`) VALUES
 (91, 1, '001.png'),
 (92, 2, '002.png'),
 (93, 3, '003.png'),
@@ -127,7 +130,7 @@ CREATE TABLE `producto` (
   `categoria_id_categoria` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT DELAYED IGNORE INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_producto`, `categoria_id_categoria`) VALUES
+INSERT INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_producto`, `categoria_id_categoria`) VALUES
 (1, 'Polera Minimall 1', 'Diseño minimalista en algodón', 11990.00, 1),
 (2, 'Polera Minimal 2', 'Diseño minimalista en algodón', 11990.00, 1),
 (3, 'Polera Art 1', 'Diseño artístico exclusivo', 13990.00, 1),
@@ -191,7 +194,7 @@ CREATE TABLE `rol` (
   `nom_rol` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT DELAYED IGNORE INTO `rol` (`id_rol`, `nom_rol`) VALUES
+INSERT INTO `rol` (`id_rol`, `nom_rol`) VALUES
 (1, 'admin'),
 (2, 'cliente'),
 (3, 'vendedor');
@@ -202,7 +205,7 @@ CREATE TABLE `talla` (
   `nom_talla` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT DELAYED IGNORE INTO `talla` (`id_talla`, `nom_talla`) VALUES
+INSERT INTO `talla` (`id_talla`, `nom_talla`) VALUES
 (1, 'XS'),
 (2, 'S'),
 (3, 'M'),
@@ -221,7 +224,7 @@ CREATE TABLE `usuario` (
   `tel_us` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT DELAYED IGNORE INTO `usuario` (`id_us`, `nom_us`, `mail_us`, `pass_us`, `rol_id_rol`, `id_est`, `tel_us`) VALUES
+INSERT INTO `usuario` (`id_us`, `nom_us`, `mail_us`, `pass_us`, `rol_id_rol`, `id_est`, `tel_us`) VALUES
 (1, 'Benjamin Belmar', 'babgutierrez.135@gmail.com', '$2b$10$pt8upPi8wdJ7ebK84Ia4v.DPNLs4Ks4nI1wqAnZLuqqaIrXoHLfnG', 2, 1, 922208860),
 (2, 'Denisse Orellana', 'denisse@moderator.com', '$2b$10$qF6y.0GYK7Gr0gMKE0wtD.si6ZP4gp3FnvvlPIP//InVz3VS.6V2.', 1, 1, NULL),
 (4, 'Jack Sparrow', 'jacksparrow@gmail.com', '$2b$10$XV2B9w9JEuhr3ZhPvEbVr.8iBwBpmuB.rMKfJkZaHS6n8bWGp9nkG', 3, 1, NULL);
@@ -232,8 +235,94 @@ CREATE TABLE `variante_producto` (
   `producto_id_producto` int(11) NOT NULL,
   `talla_id_talla` int(11) NOT NULL,
   `stock_var` int(11) NOT NULL,
-  `precio_var` decimal(10,2) DEFAULT NULL
+  `precio_var` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `variante_producto` (`id_var`, `producto_id_producto`, `talla_id_talla`, `stock_var`, `precio_var`) VALUES
+(1, 1, 1, 38, 13146),
+(2, 1, 2, 14, 12845),
+(3, 1, 3, 40, 11892),
+(4, 1, 4, 6, 13123),
+(5, 1, 5, 46, 11564),
+(6, 1, 6, 39, 11865),
+(7, 2, 1, 24, 13626),
+(8, 2, 2, 14, 12434),
+(9, 2, 3, 42, 12079),
+(10, 2, 4, 6, 13545),
+(11, 2, 5, 22, 13743),
+(12, 2, 6, 44, 12432),
+(13, 3, 1, 49, 13741),
+(14, 3, 2, 42, 13987),
+(15, 3, 3, 35, 14835),
+(16, 3, 4, 11, 15483),
+(17, 3, 5, 30, 15333),
+(18, 3, 6, 11, 13970),
+(19, 4, 1, 34, 15648),
+(20, 4, 2, 43, 14437),
+(21, 4, 3, 21, 13498),
+(22, 4, 4, 29, 13614),
+(23, 4, 5, 38, 15692),
+(24, 4, 6, 42, 15397),
+(25, 5, 1, 10, 11893),
+(26, 5, 2, 29, 11366),
+(27, 5, 3, 38, 10929),
+(28, 5, 4, 37, 10872),
+(29, 5, 5, 25, 12544),
+(30, 5, 6, 11, 11612),
+(31, 6, 1, 37, 8719),
+(32, 6, 2, 10, 10081),
+(33, 6, 3, 27, 9506),
+(34, 6, 4, 40, 9502),
+(35, 6, 5, 28, 9741),
+(36, 6, 6, 26, 9765),
+(37, 7, 1, 29, 14403),
+(38, 7, 2, 35, 13801),
+(39, 7, 3, 42, 14387),
+(40, 7, 4, 27, 14353),
+(41, 7, 5, 45, 14000),
+(42, 7, 6, 18, 13696),
+(43, 8, 1, 33, 13901),
+(44, 8, 2, 46, 13223),
+(45, 8, 3, 15, 13913),
+(46, 8, 4, 23, 14869),
+(47, 8, 5, 34, 12925),
+(48, 8, 6, 21, 14824),
+(49, 9, 1, 12, 14814),
+(50, 9, 2, 16, 15453),
+(51, 9, 3, 25, 15844),
+(52, 9, 4, 16, 14490),
+(53, 9, 5, 22, 15825),
+(54, 9, 6, 46, 14676),
+(55, 11, 1, 19, 19221),
+(56, 11, 2, 15, 20678),
+(57, 11, 3, 20, 20936),
+(58, 11, 4, 38, 21106),
+(59, 11, 5, 41, 20085),
+(60, 11, 6, 48, 21960),
+(61, 12, 1, 28, 20186),
+(62, 12, 2, 31, 17898),
+(63, 12, 3, 38, 19840),
+(64, 12, 4, 26, 18313),
+(65, 12, 5, 13, 19940),
+(66, 12, 6, 5, 17660),
+(67, 13, 1, 12, 22310),
+(68, 13, 2, 41, 22190),
+(69, 13, 3, 10, 21522),
+(70, 13, 4, 22, 21446),
+(71, 13, 5, 48, 22285),
+(72, 13, 6, 37, 23627),
+(73, 14, 1, 18, 21385),
+(74, 14, 2, 36, 20822),
+(75, 14, 3, 42, 20913),
+(76, 14, 4, 45, 20841),
+(77, 14, 5, 44, 20418),
+(78, 14, 6, 40, 18303),
+(79, 15, 1, 21, 17290),
+(80, 15, 2, 22, 17284),
+(81, 15, 3, 14, 20556),
+(82, 15, 4, 29, 17602),
+(83, 15, 5, 32, 19348),
+(84, 15, 6, 42, 20675);
 
 
 ALTER TABLE `carrito`
@@ -246,6 +335,9 @@ ALTER TABLE `categoria`
 ALTER TABLE `direccion`
   ADD PRIMARY KEY (`id_direccion`),
   ADD KEY `usuario_id_us` (`usuario_id_us`);
+
+ALTER TABLE `envio`
+  ADD PRIMARY KEY (`id_envio`);
 
 ALTER TABLE `estado_usuario`
   ADD PRIMARY KEY (`id_est`);
@@ -264,6 +356,9 @@ ALTER TABLE `producto`
 ALTER TABLE `producto_carrito`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `producto_pedido`
+  ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `rol`
   ADD PRIMARY KEY (`id_rol`);
 
@@ -278,7 +373,7 @@ ALTER TABLE `variante_producto`
 
 
 ALTER TABLE `carrito`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
@@ -286,17 +381,23 @@ ALTER TABLE `categoria`
 ALTER TABLE `direccion`
   MODIFY `id_direccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
+ALTER TABLE `envio`
+  MODIFY `id_envio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 ALTER TABLE `imagen_producto`
   MODIFY `id_img` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 ALTER TABLE `producto`
   MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 ALTER TABLE `producto_carrito`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+ALTER TABLE `producto_pedido`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 ALTER TABLE `rol`
   MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
@@ -305,7 +406,7 @@ ALTER TABLE `usuario`
   MODIFY `id_us` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 ALTER TABLE `variante_producto`
-  MODIFY `id_var` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_var` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 
 ALTER TABLE `carrito`
