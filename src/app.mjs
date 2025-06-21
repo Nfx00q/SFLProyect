@@ -64,7 +64,7 @@ app.use("/logout", loginRoutes);
 app.use("/admin/products", checkUserExists, checkUsuarioActivo, isAdmin, adminProductsRoutes);
 app.use('/admin', checkUserExists, checkUsuarioActivo, isAdmin, adminRoutes);
 app.use('/admin/users', checkUserExists, checkUsuarioActivo, isAdmin, adminUsersRoutes);
-app.use('/shop-cart', checkUserExists, checkUsuarioActivo, shopCartRoutes);
+app.use('/shop-cart', shopCartRoutes);
 app.use('/payment', paymentRoutes);
 
 app.get("/logout", (req, res) => {

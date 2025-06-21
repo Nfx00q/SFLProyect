@@ -152,12 +152,16 @@
                     </p>
                     <button
                       type="button"
-                      class="btn btn-dark btn-sm mt-auto"
-                      onclick="abrirModalCarrito('<%= producto.id_producto %>')"
+                      class="btn btn-outline-dark w-100 btn-agregar-carrito"
+                      data-id="<%= producto.id_producto %>"
+                      data-nombre="<%= producto.nombre %>"
+                      data-precio="<%= producto.precio.toFixed(0) %>"
+                      data-imagen="/Clothes/<%= producto.url_img %>"
                       data-bs-toggle="modal"
                       data-bs-target="#modalCarrito"
+                      onclick="abrirModalCarrito('<%= producto.id_producto %>')"
                     >
-                      <i class="fas fa-cart-plus"></i> Añadir al carrito
+                      <i class="fas fa-cart-plus me-1"></i> Agregar al carrito
                     </button>
                   </div>
                 </div>
@@ -180,11 +184,14 @@
       aria-labelledby="modalCarritoLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
-        <form id="formAgregarCarrito" method="POST">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalCarritoLabel">
+      <div class="modal-dialog modal-dialog-centered">
+        <form id="formAgregarCarrito" method="POST" class="w-100">
+          <div class="modal-content bg-white border-0 shadow-sm">
+            <div class="modal-header bg-light border-0">
+              <h5
+                class="modal-title text-dark fw-semibold"
+                id="modalCarritoLabel"
+              >
                 Agregar al carrito
               </h5>
               <button
@@ -194,27 +201,52 @@
                 aria-label="Cerrar"
               ></button>
             </div>
+
             <div class="modal-body">
               <input type="hidden" name="id_producto" id="id_producto" />
 
-              <div class="mb-3">
-                <label for="talla" class="form-label">Talla</label>
-                <select class="form-select" name="talla" id="talla" required>
+              <!-- Imagen del producto -->
+              <div class="text-center mb-3">
+                <img
+                  src=""
+                  id="modalProductoImagen"
+                  alt="Producto"
+                  class="img-fluid rounded"
+                  style="max-height: 220px; object-fit: contain"
+                />
+              </div>
+
+              <!-- Nombre y precio -->
+              <div class="text-center mb-3">
+                <h6 class="text-dark fw-bold" id="modalProductoNombre">
+                  Nombre producto
+                </h6>
+                <p class="text-muted mb-0" id="modalProductoPrecio">$--</p>
+              </div>
+
+              <!-- Tallas dinámicas -->
+              <div class="mb-3 text-center">
+                <label for="talla" class="form-label text-dark d-block"
+                  >Selecciona talla</label
+                >
+                <select
+                  class="form-select bg-light text-dark w-75 mx-auto"
+                  name="talla"
+                  id="talla"
+                  required
+                >
                   <option disabled selected>Seleccione una talla</option>
-                  <option value="XS">XS</option>
-                  <option value="S">S</option>
-                  <option value="M">M</option>
-                  <option value="L">L</option>
-                  <option value="XL">XL</option>
-                  <option value="XXL">XXL</option>
                 </select>
               </div>
 
-              <div class="mb-1">
-                <label for="cantidad" class="form-label">Cantidad</label>
+              <!-- Cantidad -->
+              <div class="mb-3">
+                <label for="cantidad" class="form-label text-dark"
+                  >Cantidad</label
+                >
                 <input
                   type="number"
-                  class="form-control"
+                  class="form-control bg-light text-dark"
                   name="cantidad"
                   id="cantidad"
                   min="1"
@@ -223,9 +255,10 @@
                 />
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-success w-100">
-                <i class="fas fa-cart-plus"></i> Confirmar
+
+            <div class="modal-footer bg-light border-0">
+              <button type="submit" class="btn btn-dark w-100 fw-semibold">
+                <i class="fas fa-cart-plus me-2"></i> Confirmar
               </button>
             </div>
           </div>
@@ -248,6 +281,27 @@
         >0</span
       >
     </a>
+
+    <!-- Toast de éxito -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+      <div
+        id="toastExito"
+        class="toast align-items-center text-bg-dark border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex">
+          <div class="toast-body">✅ Producto añadido al carrito.</div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Cerrar"
+          ></button>
+        </div>
+      </div>
+    </div>
 
     <script src="/JS/home.js"></script>
   </body>

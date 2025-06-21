@@ -1,6 +1,7 @@
 // routes/payment.mjs
 import express from 'express';
 import { checkout } from '../controllers/paymentController.mjs';
+import { pool } from '../database.mjs';
 
 const router = express.Router();
 
@@ -61,13 +62,13 @@ router.get('/success', async (req, res) => {
     await pool.query(
       `INSERT INTO envio (pedido_id_pedido, est_envio, num_segui, transp)
        VALUES (?, ?, ?, ?)`,
-      [pedidoId, 'preparando', NULL, 'Por asignar']
+      [pedidoId, 'preparando', null, 'Por asignar']
     );
 
     // 7. Vaciar el carrito
     await pool.query('DELETE FROM producto_carrito WHERE carrito_id_carrito = ?', [carritoId]);
 
-    res.render('success', { pedidoId, total, productos }); // Puedes hacer tu vista .ejs para mostrar el detalle
+    res.render('success', { pedidoId, total, items:productos }); // Puedes hacer tu vista .ejs para mostrar el detalle
 
   } catch (err) {
     console.error('❌ Error al generar el pedido:', err);

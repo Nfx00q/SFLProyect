@@ -1,29 +1,23 @@
 <%- include('partials/header') %>
 
 <div class="container mt-5">
-  <div class="card shadow p-4">
-    <h2 class="text-success text-center mb-4">✅ ¡Gracias por tu compra!</h2>
-    <p class="text-center">Tu pedido ha sido registrado correctamente.</p>
+  <h2>¡Pago aprobado!</h2>
+  <p>Gracias por tu compra. Aquí está tu comprobante:</p>
 
-    <hr />
+  <h4>Pedido N° <%= pedidoId %></h4>
+  <ul class="list-group mb-4">
+    <% items.forEach(item => { %>
+      <li class="list-group-item">
+        <strong><%= item.nom_producto || item.name %></strong><br>
+        Cantidad: <%= item.cantidad %><br>
+        Precio unitario: $<%= Number(item.precio_var || item.price).toFixed(0) %>
+      </li>
+    <% }) %>
+  </ul>
 
-    <h5><strong>N° de Pedido:</strong> <%= pedidoId %></h5>
-    <h5><strong>Total pagado:</strong> $<%= total.toLocaleString('es-CL') %></h5>
+  <h5>Total pagado: $<%= total %></h5>
 
-    <h4 class="mt-4">🛍️ Productos comprados:</h4>
-    <ul class="list-group mt-2">
-      <% productos.forEach(prod => { %>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <%= prod.cantidad %> x <strong><%= prod.nom_producto %></strong>
-            <span>$<%= (prod.precio * prod.cantidad).toLocaleString('es-CL') %></span>
-        </li>
-      <% }) %>
-    </ul>
-
-    <div class="text-center mt-4">
-      <a href="/" class="btn btn-primary">Volver al inicio</a>
-    </div>
-  </div>
+  <a href="/catalog" class="btn btn-primary mt-3">Volver al catálogo</a>
 </div>
 
 <%- include('partials/footer') %>
