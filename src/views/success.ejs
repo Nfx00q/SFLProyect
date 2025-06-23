@@ -10,7 +10,8 @@
       <li class="list-group-item">
         <strong><%= item.nom_producto || item.name %></strong><br>
         Cantidad: <%= item.cantidad %><br>
-        Precio unitario: $<%= Number(item.precio_var || item.price).toFixed(0) %>
+        <% const precioUnitario = item.price || item.unit_price || 0; %>
+        Precio unitario: $<%= Number(precioUnitario).toLocaleString('es-CL') %>
       </li>
     <% }) %>
   </ul>

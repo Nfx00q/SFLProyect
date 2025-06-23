@@ -15,6 +15,9 @@ router.get('/remove/:id_producto_carrito', shopCartController.removeFromCart);
 router.get('/admin/vaciar/:id_usuario', checkUserExists, checkUsuarioActivo, shopCartController.vaciarCarrito);
 router.get('/admin/eliminar/:id_usuario', checkUserExists, checkUsuarioActivo, shopCartController.eliminarCarrito);
 router.get('/precio/:id_producto/:nom_talla', shopCartController.getPrecioPorTalla);
+router.post('/decrease/:id', shopCartController.decreaseCantidad);
+router.post('/increase/:id', shopCartController.increaseCantidad);
+
 
 router.post('/add-to-cart', checkUserExists, checkUsuarioActivo, shopCartController.agregarAlCarrito);
 

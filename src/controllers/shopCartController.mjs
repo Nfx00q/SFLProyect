@@ -124,12 +124,12 @@ shopCartController.mostrarCarrito = async (req, res) => {
     if (!carrito) return res.render('cart', { carrito: [] });
 
     const [productos] = await pool.query(
-      `SELECT pc.id AS id_producto_carrito, pc.cantidad, pc.precio,
-              p.nom_producto, t.nom_talla
-       FROM producto_carrito pc
-       JOIN variante_producto vp ON pc.variante_producto_id_var = vp.id_var
-       JOIN producto p ON vp.producto_id_producto = p.id_producto
-       JOIN talla t ON vp.talla_id_talla = t.id_talla
+      `SELECT pc.*, vp.precio_var AS precio, p.nom_producto, t.nom_talla, ip.url_img
+      FROM producto_carrito pc
+      JOIN variante_producto vp ON pc.variante_producto_id_var = vp.id_var
+      JOIN producto p ON vp.producto_id_producto = p.id_producto
+      JOIN talla t ON vp.talla_id_talla = t.id_talla
+      LEFT JOIN imagen_producto ip ON ip.producto_id_producto = p.id_producto
        WHERE pc.carrito_id_carrito = ?`,
       [carrito.id_carrito]
     );
@@ -218,6 +218,58 @@ shopCartController.getPrecioPorTalla = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener precio' });
   }
 };
+
+shopCartController.decreaseCantidad = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [[producto]] = await pool.query(
+      'SELECT cantidad FROM producto_carrito WHERE id = ?',
+      [id]
+    );
+
+    if (!producto) {
+      return res.redirect('/shop-cart');
+    }
+
+    if (producto.cantidad > 1) {
+      // Disminuir cantidad
+      await pool.query(
+        'UPDATE producto_carrito SET cantidad = cantidad - 1 WHERE id = ?',
+        [id]
+      );
+    } else {
+      // Si es 1, eliminar producto del carrito
+      await pool.query(
+        'DELETE FROM producto_carrito WHERE id = ?',
+        [id]
+      );
+    }
+
+    res.redirect('/shop-cart');
+  } catch (error) {
+    console.error('❌ Error al disminuir cantidad:', error);
+    res.status(500).send('Error al actualizar la cantidad del producto');
+  }
+};
+
+shopCartController.increaseCantidad = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Aumentar cantidad en 1
+    await pool.query(
+      'UPDATE producto_carrito SET cantidad = cantidad + 1 WHERE id = ?',
+      [id]
+    );
+
+    res.redirect('/shop-cart');
+  } catch (error) {
+    console.error('❌ Error al aumentar cantidad:', error);
+    res.status(500).send('Error al actualizar la cantidad del producto');
+  }
+};
+
 
 
 export default shopCartController;
