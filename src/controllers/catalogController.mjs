@@ -7,9 +7,9 @@ export async function getCatalogPage(req, res) {
         c.id_categoria,
         c.nom_categoria,
         p.id_producto,
-        p.nom_producto,
-        p.des_producto,
-        p.precio_producto,
+        p.nom_producto AS nombre,
+        p.des_producto AS descripcion,
+        p.precio_producto AS precio,
         i.url_img
       FROM categoria c
       LEFT JOIN producto p ON c.id_categoria = p.categoria_id_categoria
@@ -20,6 +20,7 @@ export async function getCatalogPage(req, res) {
     const [rows] = await pool.query(sql);
 
     const categorias = {};
+
     rows.forEach(row => {
       if (!categorias[row.id_categoria]) {
         categorias[row.id_categoria] = {
@@ -27,13 +28,14 @@ export async function getCatalogPage(req, res) {
           productos: []
         };
       }
-      if (row.nom_producto) {
+
+      if (row.id_producto) {
         categorias[row.id_categoria].productos.push({
           id_producto: row.id_producto,
-          nombre: row.nom_producto,
-          descripcion: row.des_producto,
-          precio: Number(row.precio_producto),
-          url_img: row.url_img // 👈 ahora sí pasas la imagen
+          nombre: row.nombre,
+          descripcion: row.descripcion,
+          precio: Number(row.precio),
+          url_img: row.url_img || 'default.jpg' // imagen por defecto si no hay
         });
       }
     });
@@ -41,7 +43,7 @@ export async function getCatalogPage(req, res) {
     res.render('catalog', { categorias });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Error en la consulta SQL');
+    console.error('❌ Error al cargar catálogo:', err);
+    res.status(500).send('Error al cargar el catálogo');
   }
 }

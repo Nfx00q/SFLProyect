@@ -1,0 +1,52 @@
+<!-- Modal Agregar al Carrito -->
+<div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form id="formAgregarCarrito" method="POST" class="w-100">
+      <div class="modal-content bg-white border-0 shadow-sm">
+        <div class="modal-header bg-light border-0">
+          <h5 class="modal-title text-dark fw-semibold" id="modalCarritoLabel">Agregar al carrito</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" name="id_producto" id="id_producto" />
+
+          <!-- Imagen del producto -->
+          <div class="text-center mb-3">
+            <img src="" id="modalProductoImagen" alt="Producto" class="img-fluid rounded"
+              style="max-height: 220px; object-fit: contain" />
+          </div>
+
+          <!-- Nombre y precio -->
+          <div class="text-center mb-3">
+            <h6 class="text-dark fw-bold" id="modalProductoNombre">Nombre producto</h6>
+            <p class="text-muted mb-0" id="modalProductoPrecio">$0</p>
+          </div>
+
+          <!-- Tallas como botones -->
+          <div class="mb-3 text-center">
+            <label class="form-label d-block text-dark">Selecciona talla</label>
+            <% const tallas = ['XS', 'S', 'M', 'L', 'XL', 'XXL']; %>
+            <% tallas.forEach(talla => { %>
+              <input type="radio" class="btn-check" name="talla" id="talla_<%= talla %>" value="<%= talla %>" required />
+              <label class="btn btn-outline-dark btn-sm me-1 mb-2" for="talla_<%= talla %>"><%= talla %></label>
+            <% }) %>
+          </div>
+
+          <!-- Cantidad -->
+          <div class="mb-3">
+            <label for="cantidad" class="form-label text-dark">Cantidad</label>
+            <input type="number" class="form-control bg-light text-dark" name="cantidad" id="cantidad" min="1"
+              value="1" required />
+          </div>
+        </div>
+
+        <div class="modal-footer bg-light border-0">
+          <button type="submit" class="btn btn-dark w-100 fw-semibold">
+            <i class="fas fa-cart-plus me-2"></i> Confirmar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
