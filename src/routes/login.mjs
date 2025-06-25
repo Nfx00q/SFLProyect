@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
-import { getLoginPage, login, logout } from '../controllers/loginController.mjs';
+import { login, logout } from '../controllers/userController.mjs';
+import { getLoginPage } from '../controllers/userController.mjs';
 
 router.get('/', getLoginPage);
 router.post('/', login);

@@ -94,47 +94,75 @@ document
         body: JSON.stringify(data),
       });
 
+      const contentType = response.headers.get("content-type");
+
       if (!response.ok) {
-        const html = await response.text();
-        console.warn("⚠️ Respuesta inesperada (HTML):", html);
-        throw new Error("Respuesta del servidor no válida");
+        if (contentType && contentType.includes("application/json")) {
+          const error = await response.json();
+          if (error.redirect) {
+            mostrarRedirectToast(error.message, error.redirect);
+            return;
+          }
+          throw new Error(error.message || "Error inesperado");
+        } else {
+          throw new Error("Respuesta inesperada del servidor");
+        }
       }
 
       const result = await response.json();
-
       if (result.success) {
-        // Cierra modal
-        const modal = bootstrap.Modal.getInstance(
+        bootstrap.Modal.getInstance(
           document.getElementById("modalCarrito")
-        );
-        modal.hide();
-
-        // Muestra toast de éxito
-        const toastEl = document.getElementById("toastExito");
-        const toast = new bootstrap.Toast(toastEl);
-        toast.show();
-
-        // Actualiza el contador
+        )?.hide();
+        bootstrap.Toast.getOrCreateInstance(
+          document.getElementById("toastExito")
+        )?.show();
         actualizarContadorCarrito();
       } else {
-        console.error("❌ Error al agregar:", result.message);
-        alert("Error al agregar al carrito: " + (result.message || ""));
+        console.warn("⚠️ Agregado fallido:", result.message);
       }
     } catch (err) {
       console.error("❌ Error inesperado:", err);
-      alert("Ocurrió un error al agregar al carrito");
     }
   });
 
 // ✅ Contador del carrito
-async function actualizarContadorCarrito() {
-  try {
-    const res = await fetch("/shop-cart/count");
-    const data = await res.json();
-    document.getElementById("cart-count").textContent = data.count || 0;
-  } catch (err) {
-    console.error("⚠️ No se pudo obtener el contador del carrito:", err);
-  }
+function actualizarContadorCarrito() {
+  fetch("/shop-cart/count")
+    .then((res) => res.json())
+    .then((data) => {
+      const contador = document.getElementById("cart-count");
+      if (contador) {
+        contador.textContent = data.count;
+      } else {
+        console.warn("⚠️ No se encontró el elemento #contador-carrito");
+      }
+    })
+    .catch((err) => {
+      console.warn("⚠️ No se pudo obtener el contador del carrito:", err);
+    });
 }
+
+function mostrarRedirectToast(mensaje, url) {
+  const toastEl = document.getElementById("redirectToast");
+  if (!toastEl) return;
+
+  let seconds = 3;
+  toastEl.querySelector(".toast-body").innerHTML = `${mensaje} Redirigiendo en <span id="countdown">${seconds}</span> segundos…`;
+
+  const countdownSpan = toastEl.querySelector("#countdown");
+  const bsToast = new bootstrap.Toast(toastEl);
+  bsToast.show();
+
+  const interval = setInterval(() => {
+    seconds--;
+    countdownSpan.textContent = seconds;
+    if (seconds <= 0) {
+      clearInterval(interval);
+      window.location.href = url;
+    }
+  }, 1000);
+}
+
 
 actualizarContadorCarrito();

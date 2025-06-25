@@ -1,63 +1,30 @@
-import { pool } from '../database.mjs';
+// src/controllers/shopCartController.mjs
+import * as cartModel from '../models/cartModel.mjs';
 
 const shopCartController = {};
 
-// Asegura que el usuario tenga un carrito activo, si no lo crea
 shopCartController.ensureCart = async (userId) => {
-  const [[carrito]] = await pool.query(
-    'SELECT id_carrito FROM carrito WHERE usuario_id_us = ? AND es_carrito = 1',
-    [userId]
-  );
-
+  const carrito = await cartModel.getActiveCartByUserId(userId);
   if (carrito) return carrito.id_carrito;
-
-  const [nuevo] = await pool.query(
-    'INSERT INTO carrito (fec_carrito, es_carrito, usuario_id_us) VALUES (NOW(), 1, ?)',
-    [userId]
-  );
-
-  return nuevo.insertId;
+  const id = await cartModel.createCart(userId);
+  return id;
 };
 
-// Agrega un producto al carrito
 shopCartController.agregarAlCarrito = async (req, res) => {
   const { id_producto, cantidad, talla } = req.body;
   const userId = req.session.usuario.id;
 
   try {
-    const [[variante]] = await pool.query(
-      `SELECT id_var, precio_var FROM variante_producto vp
-       JOIN talla t ON vp.talla_id_talla = t.id_talla
-       WHERE producto_id_producto = ? AND t.nom_talla = ?`,
-      [id_producto, talla]
-    );
-
-    if (!variante) {
-      return res.status(400).json({ success: false, message: 'Talla no disponible' });
-    }
+    const variante = await cartModel.getVariantByProductAndSize(id_producto, talla);
+    if (!variante) return res.status(400).json({ success: false, message: 'Talla no disponible' });
 
     const carritoId = await shopCartController.ensureCart(userId);
-
-    const [[existente]] = await pool.query(
-      `SELECT id FROM producto_carrito
-       WHERE carrito_id_carrito = ? AND variante_producto_id_var = ?`,
-      [carritoId, variante.id_var]
-    );
+    const existente = await cartModel.getProductInCart(carritoId, variante.id_var);
 
     if (existente) {
-      await pool.query(
-        `UPDATE producto_carrito 
-         SET cantidad = cantidad + ?, precio = ? 
-         WHERE id = ?`,
-        [cantidad, variante.precio_var, existente.id]
-      );
+      await cartModel.updateProductInCart(cantidad, variante.precio_var, existente.id);
     } else {
-      await pool.query(
-        `INSERT INTO producto_carrito 
-        (cantidad, precio, carrito_id_carrito, producto_id_producto, variante_producto_id_var)
-        VALUES (?, ?, ?, ?, ?)`,
-        [cantidad, variante.precio_var, carritoId, id_producto, variante.id_var]
-      );
+      await cartModel.addProductToCart(carritoId, variante.id_var, cantidad, variante.precio_var);
     }
 
     res.json({ success: true });
@@ -67,73 +34,35 @@ shopCartController.agregarAlCarrito = async (req, res) => {
   }
 };
 
-// Devuelve la cantidad de productos en el carrito del usuario
 shopCartController.getCartCount = async (req, res) => {
   const userId = req.session.usuario.id;
 
   try {
-    const [[carrito]] = await pool.query(
-      'SELECT id_carrito FROM carrito WHERE usuario_id_us = ? AND es_carrito = 1',
-      [userId]
-    );
-
-    if (!carrito) return res.json({ count: 0 });
-
-    const [[suma]] = await pool.query(
-      'SELECT SUM(cantidad) AS total FROM producto_carrito WHERE carrito_id_carrito = ?',
-      [carrito.id_carrito]
-    );
-
-    res.json({ count: suma.total || 0 });
+    const count = await cartModel.countProductsInCart(userId);
+    res.json({ count });
   } catch (err) {
     console.error('❌ Error al obtener el conteo:', err);
     res.json({ count: 0 });
   }
 };
 
-// Devuelve las tallas disponibles para un producto
 shopCartController.getTallasPorProducto = async (req, res) => {
   const { id_producto } = req.params;
-
   try {
-    const [rows] = await pool.query(
-      `SELECT DISTINCT t.id_talla, t.nom_talla
-       FROM variante_producto vp
-       JOIN talla t ON vp.talla_id_talla = t.id_talla
-       WHERE vp.producto_id_producto = ?`,
-      [id_producto]
-    );
-
-    res.json(rows);
+    const tallas = await cartModel.getSizesByProduct(id_producto);
+    res.json(tallas);
   } catch (err) {
     console.error('❌ Error obteniendo tallas:', err);
     res.status(500).json({ error: 'Error al obtener tallas' });
   }
 };
 
-// Muestra el carrito en la vista
 shopCartController.mostrarCarrito = async (req, res) => {
   const userId = req.session.usuario.id;
-
   try {
-    const [[carrito]] = await pool.query(
-      'SELECT id_carrito FROM carrito WHERE usuario_id_us = ? AND es_carrito = 1',
-      [userId]
-    );
-
+    const carrito = await cartModel.getActiveCartByUserId(userId);
     if (!carrito) return res.render('cart', { carrito: [] });
-
-    const [productos] = await pool.query(
-      `SELECT pc.*, vp.precio_var AS precio, p.nom_producto, t.nom_talla, ip.url_img
-      FROM producto_carrito pc
-      JOIN variante_producto vp ON pc.variante_producto_id_var = vp.id_var
-      JOIN producto p ON vp.producto_id_producto = p.id_producto
-      JOIN talla t ON vp.talla_id_talla = t.id_talla
-      LEFT JOIN imagen_producto ip ON ip.producto_id_producto = p.id_producto
-       WHERE pc.carrito_id_carrito = ?`,
-      [carrito.id_carrito]
-    );
-
+    const productos = await cartModel.getCartProducts(carrito.id_carrito);
     res.render('cart', { carrito: productos });
   } catch (error) {
     console.error('❌ Error al mostrar el carrito:', error);
@@ -143,9 +72,8 @@ shopCartController.mostrarCarrito = async (req, res) => {
 
 shopCartController.removeFromCart = async (req, res) => {
   const { id_producto_carrito } = req.params;
-
   try {
-    await pool.query('DELETE FROM producto_carrito WHERE id = ?', [id_producto_carrito]);
+    await cartModel.removeProductFromCart(id_producto_carrito);
     res.redirect('/shop-cart');
   } catch (error) {
     console.error('❌ Error al eliminar producto del carrito:', error);
@@ -153,20 +81,10 @@ shopCartController.removeFromCart = async (req, res) => {
   }
 };
 
-// Vacía todo el carrito de un usuario
 shopCartController.vaciarCarrito = async (req, res) => {
   const { id_usuario } = req.params;
-
   try {
-    const [[carrito]] = await pool.query(
-      'SELECT id_carrito FROM carrito WHERE usuario_id_us = ? AND es_carrito = 1',
-      [id_usuario]
-    );
-
-    if (carrito) {
-      await pool.query('DELETE FROM producto_carrito WHERE carrito_id_carrito = ?', [carrito.id_carrito]);
-    }
-
+    await cartModel.clearCart(id_usuario);
     res.redirect(`/admin/users/detail/${id_usuario}`);
   } catch (err) {
     console.error('❌ Error al vaciar carrito:', err);
@@ -174,21 +92,10 @@ shopCartController.vaciarCarrito = async (req, res) => {
   }
 };
 
-// Elimina el carrito completo (registro y productos)
 shopCartController.eliminarCarrito = async (req, res) => {
   const { id_usuario } = req.params;
-
   try {
-    const [[carrito]] = await pool.query(
-      'SELECT id_carrito FROM carrito WHERE usuario_id_us = ? AND es_carrito = 1',
-      [id_usuario]
-    );
-
-    if (carrito) {
-      await pool.query('DELETE FROM producto_carrito WHERE carrito_id_carrito = ?', [carrito.id_carrito]);
-      await pool.query('DELETE FROM carrito WHERE id_carrito = ?', [carrito.id_carrito]);
-    }
-
+    await cartModel.deleteCart(id_usuario);
     res.redirect(`/admin/users/detail/${id_usuario}`);
   } catch (err) {
     console.error('❌ Error al eliminar carrito:', err);
@@ -198,21 +105,10 @@ shopCartController.eliminarCarrito = async (req, res) => {
 
 shopCartController.getPrecioPorTalla = async (req, res) => {
   const { id_producto, nom_talla } = req.params;
-
   try {
-    const [[fila]] = await pool.query(
-      `SELECT vp.precio_var
-       FROM variante_producto vp
-       JOIN talla t ON vp.talla_id_talla = t.id_talla
-       WHERE vp.producto_id_producto = ? AND t.nom_talla = ?`,
-      [id_producto, nom_talla]
-    );
-
-    if (!fila) {
-      return res.status(404).json({ error: 'Precio no encontrado' });
-    }
-
-    res.json({ precio: fila.precio_var });
+    const precio = await cartModel.getPriceBySize(id_producto, nom_talla);
+    if (!precio) return res.status(404).json({ error: 'Precio no encontrado' });
+    res.json({ precio });
   } catch (err) {
     console.error('Error al obtener precio por talla:', err);
     res.status(500).json({ error: 'Error al obtener precio' });
@@ -221,31 +117,8 @@ shopCartController.getPrecioPorTalla = async (req, res) => {
 
 shopCartController.decreaseCantidad = async (req, res) => {
   const { id } = req.params;
-
   try {
-    const [[producto]] = await pool.query(
-      'SELECT cantidad FROM producto_carrito WHERE id = ?',
-      [id]
-    );
-
-    if (!producto) {
-      return res.redirect('/shop-cart');
-    }
-
-    if (producto.cantidad > 1) {
-      // Disminuir cantidad
-      await pool.query(
-        'UPDATE producto_carrito SET cantidad = cantidad - 1 WHERE id = ?',
-        [id]
-      );
-    } else {
-      // Si es 1, eliminar producto del carrito
-      await pool.query(
-        'DELETE FROM producto_carrito WHERE id = ?',
-        [id]
-      );
-    }
-
+    await cartModel.decreaseQuantity(id);
     res.redirect('/shop-cart');
   } catch (error) {
     console.error('❌ Error al disminuir cantidad:', error);
@@ -255,21 +128,13 @@ shopCartController.decreaseCantidad = async (req, res) => {
 
 shopCartController.increaseCantidad = async (req, res) => {
   const { id } = req.params;
-
   try {
-    // Aumentar cantidad en 1
-    await pool.query(
-      'UPDATE producto_carrito SET cantidad = cantidad + 1 WHERE id = ?',
-      [id]
-    );
-
+    await cartModel.increaseQuantity(id);
     res.redirect('/shop-cart');
   } catch (error) {
     console.error('❌ Error al aumentar cantidad:', error);
     res.status(500).send('Error al actualizar la cantidad del producto');
   }
 };
-
-
 
 export default shopCartController;

@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
-import { mostrarFormulario, registrarUsuario } from '../controllers/registerController.mjs';
+import { login, logout } from '../controllers/userController.mjs';
+import { mostrarFormulario, registrarUsuario } from '../controllers/userController.mjs';
 
 // Ruta para mostrar el formulario (GET /register)
 router.get('/', mostrarFormulario);

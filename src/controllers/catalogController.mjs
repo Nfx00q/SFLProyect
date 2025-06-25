@@ -1,23 +1,8 @@
-import { pool } from '../database.mjs';
+import * as catalogModel from '../models/catalogModel.mjs';
 
 export async function getCatalogPage(req, res) {
   try {
-    const sql = `
-      SELECT 
-        c.id_categoria,
-        c.nom_categoria,
-        p.id_producto,
-        p.nom_producto AS nombre,
-        p.des_producto AS descripcion,
-        p.precio_producto AS precio,
-        i.url_img
-      FROM categoria c
-      LEFT JOIN producto p ON c.id_categoria = p.categoria_id_categoria
-      LEFT JOIN imagen_producto i ON p.id_producto = i.producto_id_producto
-      ORDER BY c.id_categoria, p.id_producto
-    `;
-
-    const [rows] = await pool.query(sql);
+    const rows = await catalogModel.getCatalogData();
 
     const categorias = {};
 
@@ -35,7 +20,7 @@ export async function getCatalogPage(req, res) {
           nombre: row.nombre,
           descripcion: row.descripcion,
           precio: Number(row.precio),
-          url_img: row.url_img || 'default.jpg' // imagen por defecto si no hay
+          url_img: row.url_img || 'default.jpg'
         });
       }
     });

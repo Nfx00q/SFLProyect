@@ -1,8 +1,10 @@
+// src/controllers/productController.mjs
 import { pool } from '../database.mjs';
+import * as productModel from '../models/productModel.mjs';
 
-const productController = {};
+// ======================== PRODUCTOS ========================
 
-productController.list = async (req, res) => {
+export async function list(req, res) {
   const page = parseInt(req.query.page) || 1;
   const limit = 10;
   const offset = (page - 1) * limit;
@@ -25,11 +27,12 @@ productController.list = async (req, res) => {
       totalPages
     });
   } catch (err) {
-    res.json(err);
+    console.error('Error list:', err);
+    res.status(500).send('Error al listar productos');
   }
-};
+}
 
-productController.create = async (req, res) => {
+export async function create(req, res) {
   const { nom_producto, des_producto, precio_producto, categoria_id_categoria, url_img } = req.body;
   const nuevoProducto = { nom_producto, des_producto, precio_producto, categoria_id_categoria };
 
@@ -41,13 +44,14 @@ productController.create = async (req, res) => {
       await pool.query('INSERT INTO imagen_producto SET ?', nuevoImg);
     }
 
-    res.redirect('/admin/products/products');
+    res.redirect('/admin/products');
   } catch (err) {
-    res.json(err);
+    console.error('Error create:', err);
+    res.status(500).send('Error al crear producto');
   }
-};
+}
 
-productController.update = async (req, res) => {
+export async function update(req, res) {
   const id = req.params.id;
   const { nom_producto, des_producto, precio_producto, categoria_id_categoria, url_img } = req.body;
   const updatedProduct = { nom_producto, des_producto, precio_producto, categoria_id_categoria };
@@ -70,38 +74,88 @@ productController.update = async (req, res) => {
 
     res.redirect('/admin/products');
   } catch (err) {
-    res.json(err);
+    console.error('Error update:', err);
+    res.status(500).send('Error al actualizar producto');
   }
-};
+}
 
-productController.delete = async (req, res) => {
+export async function del(req, res) {
   const { id } = req.params;
 
   try {
     await pool.query('DELETE FROM imagen_producto WHERE producto_id_producto = ?', [id]);
-    await pool.query('DELETE FROM producto WHERE id_producto = ?', [id]);
+    await productModel.deleteProduct(id);
     res.redirect('/admin/products');
   } catch (err) {
-    res.json(err);
+    console.error('Error delete:', err);
+    res.status(500).send('Error al eliminar producto');
   }
-};
-
-export async function getProducts(req, res) {
-  const page = parseInt(req.query.page) || 1;
-  const limit = 10;
-  const offset = (page - 1) * limit;
-
-  const [productos] = await pool.query('SELECT * FROM producto LIMIT ? OFFSET ?', [limit, offset]);
-  const [[{ count }]] = await pool.query('SELECT COUNT(*) as count FROM producto');
-
-  const totalPages = Math.ceil(count / limit);
-
-  res.render('admin/products', {
-    data: productos,
-    currentPage: page,
-    totalPages
-  });
 }
 
+// ======================== VARIANTES ========================
 
-export default productController;
+export async function listVariants(req, res) {
+  const { id } = req.params;
+
+  try {
+    const producto = await productModel.getProductById(id);
+    const [variantes] = await pool.query(`
+      SELECT v.*, t.nom_talla 
+      FROM variante_producto v
+      JOIN talla t ON v.talla_id_talla = t.id_talla
+      WHERE v.producto_id_producto = ?
+    `, [id]);
+
+    const [tallas] = await pool.query('SELECT * FROM talla');
+
+    res.render('admin/products/variants', {
+      producto,
+      variantes,
+      tallas
+    });
+  } catch (err) {
+    console.error('Error listVariants:', err);
+    res.status(500).send('Error al listar variantes');
+  }
+}
+
+export async function createVariant(req, res) {
+  const { producto_id, talla_id_talla, stock_var, precio_var } = req.body;
+  const nuevaVariante = { producto_id_producto: producto_id, talla_id_talla, stock_var, precio_var };
+
+  try {
+    await pool.query('INSERT INTO variante_producto SET ?', nuevaVariante);
+    res.redirect(`/admin/products/variants/${producto_id}`);
+  } catch (err) {
+    console.error('Error createVariant:', err);
+    res.status(500).send('Error al crear variante');
+  }
+}
+
+export async function updateVariant(req, res) {
+  const { id_var } = req.params;
+  const { producto_id, talla_id_talla, stock_var, precio_var } = req.body;
+
+  try {
+    await pool.query(
+      'UPDATE variante_producto SET talla_id_talla = ?, stock_var = ?, precio_var = ? WHERE id_var = ?',
+      [talla_id_talla, stock_var, precio_var, id_var]
+    );
+    res.redirect(`/admin/products/variants/${producto_id}`);
+  } catch (err) {
+    console.error('Error updateVariant:', err);
+    res.status(500).send('Error al actualizar variante');
+  }
+}
+
+export async function deleteVariant(req, res) {
+  const { id_var, producto_id } = req.params;
+
+  try {
+    await pool.query('DELETE FROM variante_producto WHERE id_var = ?', [id_var]);
+    res.redirect(`/admin/products/variants/${producto_id}`);
+  } catch (err) {
+    console.error('Error deleteVariant:', err);
+    res.status(500).send('Error al eliminar variante');
+  }
+}

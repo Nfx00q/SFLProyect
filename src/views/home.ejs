@@ -1,221 +1,175 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SFL - Inicio</title>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="Styles/bootstrap.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SFL - Inicio</title>
 
-    <link rel="stylesheet" href="Styles/home.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="Styles/bootstrap.css" />
 
-    <script
-      src="https://kit.fontawesome.com/65448a561c.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
+  <link rel="stylesheet" href="Styles/home.css" />
 
-  <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          <img src="Images/banner-image.png" alt="" width="120px" />
-        </a>
-        <button
-          class="navbar-toggler no-border-toggle"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarColor01"
-          aria-controls="navbarColor01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor01">
-          <ul class="navbar-nav me-auto">
+  <script src="https://kit.fontawesome.com/65448a561c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="Images/banner-image.png" alt="" width="120px" />
+      </a>
+      <button class="navbar-toggler no-border-toggle" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/catalog">Catalogo</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <% if (!usuario) { %>
             <li class="nav-item">
-              <a class="nav-link" href="/catalog">Catalogo</a>
-            </li>
-          </ul>
-          <ul class="navbar-nav ms-auto">
-            <% if (!usuario) { %>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="/login"
-                title="Iniciar sesión"
-                style="color: green"
-              >
+              <a class="nav-link" href="/login" title="Iniciar sesión" style="color: green">
                 <i class="fas fa-sign-in-alt"></i> Iniciar sesion
               </a>
             </li>
             <% } else { %>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="/logout"
-                title="Cerrar sesión"
-                style="color: indianred"
-              >
-                <i class="fas fa-sign-out-alt"></i> Cerrar sesion
-              </a>
-            </li>
-            <% } %>
-          </ul>
-        </div>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout" title="Cerrar sesión" style="color: indianred">
+                  <i class="fas fa-sign-out-alt"></i> Cerrar sesion
+                </a>
+              </li>
+              <% } %>
+        </ul>
       </div>
-    </nav>
-
-    <div class="position-relative">
-      <img
-        src="Images/portrait-image.png"
-        alt="Portada"
-        class="img-fluid w-100"
-        style="opacity: 1; max-height: 500px; object-fit: cover"
-      />
     </div>
+  </nav>
 
-    <div class="text-center my-5">
-      <h2 class="fw-bold">Últimas Prendas</h2>
-      <p class="text-muted">Explora lo más reciente de nuestra colección</p>
-    </div>
+  <div class="position-relative">
+    <img src="Images/portrait-image.png" alt="Portada" class="img-fluid w-100"
+      style="opacity: 1; max-height: 500px; object-fit: cover" />
+  </div>
 
-    <div class="accordion accordion-flush mb-5" id="accordionExample">
-      <% Object.keys(categorias).forEach((catId, index)=> { const cat =
+  <div class="text-center my-5">
+    <h2 class="fw-bold">Últimas Prendas</h2>
+    <p class="text-muted">Explora lo más reciente de nuestra colección</p>
+  </div>
+
+  <div class="accordion accordion-flush mb-5" id="accordionExample">
+    <% Object.keys(categorias).forEach((catId, index)=> { const cat =
       categorias[catId]; const collapseId = `collapse${index + 1}`; const
       headingId = `heading${index + 1}`; %>
       <div class="accordion-item border">
         <h2 class="accordion-header" id="<%= headingId %>">
-          <button
-            class="accordion-button <%= index === 0 ? '' : 'collapsed' %> bg-light fw-semibold"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#<%= collapseId %>"
-            aria-expanded="<%= index === 0 ? 'true' : 'false' %>"
-            aria-controls="<%= collapseId %>"
-          >
+          <button class="accordion-button <%= index === 0 ? '' : 'collapsed' %> bg-light fw-semibold" type="button"
+            data-bs-toggle="collapse" data-bs-target="#<%= collapseId %>"
+            aria-expanded="<%= index === 0 ? 'true' : 'false' %>" aria-controls="<%= collapseId %>">
             <%= cat.nombre %>
           </button>
         </h2>
-        <div
-          id="<%= collapseId %>"
-          class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>"
-          aria-labelledby="<%= headingId %>"
-          data-bs-parent="#accordionExample"
-        >
+        <div id="<%= collapseId %>" class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>"
+          aria-labelledby="<%= headingId %>" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <% if(cat.productos.length===0) { %>
-            <p class="text-muted">No hay productos en esta categoría.</p>
-            <% } else { %>
-            <div
-              class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4"
-            >
-              <% cat.productos.forEach(producto=> { %>
-              <div class="col">
-                <div class="card h-100 shadow-sm">
-                  <% if (producto.url_img) { %>
-                  <div
-                    class="card-img-wrapper d-flex align-items-center justify-content-center bg-white"
-                    style="height: 250px"
-                  >
-                    <img
-                      src="/Clothes/<%= producto.url_img %>"
-                      alt="Imagen de <%= producto.nombre %>"
-                      style="max-height: 100%; max-width: 100%"
-                    />
-                  </div>
-                  <% } %>
-                  <div class="card-body d-flex flex-column">
-                    <h5 class="card-title fw-semibold">
-                      <%= producto.nombre %>
-                    </h5>
-                    <p class="card-text text-muted flex-grow-1">
-                      <%= producto.descripcion %>
-                    </p>
-                    <p class="fw-bold mb-2">
-                      $<%= producto.precio.toFixed(0) %>
-                    </p>
-                    <button
-                      type="button"
-                      class="btn btn-outline-dark w-100 btn-agregar-carrito"
-                      data-id="<%= producto.id_producto %>"
-                      data-nombre="<%= producto.nombre %>"
-                      data-precio="<%= producto.precio.toFixed(0) %>"
-                      data-imagen="/Clothes/<%= producto.url_img %>"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalCarrito"
-                      onclick="abrirModalCarrito('<%= producto.id_producto %>')"
-                    >
-                      <i class="fas fa-cart-plus me-1"></i> Agregar al carrito
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <p class="text-muted">No hay productos en esta categoría.</p>
+              <% } else { %>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+                  <% cat.productos.forEach(producto=> { %>
+                    <div class="col">
+                      <div class="card h-100 shadow-sm">
+                        <% if (producto.url_img) { %>
+                          <div class="card-img-wrapper d-flex align-items-center justify-content-center bg-white"
+                            style="height: 250px">
+                            <img src="/Clothes/<%= producto.url_img %>" alt="Imagen de <%= producto.nombre %>"
+                              style="max-height: 100%; max-width: 100%" />
+                          </div>
+                          <% } %>
+                            <div class="card-body d-flex flex-column">
+                              <h5 class="card-title fw-semibold">
+                                <%= producto.nombre %>
+                              </h5>
+                              <p class="card-text text-muted flex-grow-1">
+                                <%= producto.descripcion %>
+                              </p>
+                              <p class="fw-bold mb-2">
+                                $<%= producto.precio.toFixed(0) %>
+                              </p>
+                              <button type="button" class="btn btn-outline-dark w-100 btn-agregar-carrito"
+                                data-id="<%= producto.id_producto %>" data-nombre="<%= producto.nombre %>"
+                                data-precio="<%= producto.precio.toFixed(0) %>"
+                                data-imagen="/Clothes/<%= producto.url_img %>" data-bs-toggle="modal"
+                                data-bs-target="#modalCarrito"
+                                onclick="abrirModalCarrito('<%= producto.id_producto %>')">
+                                <i class="fas fa-cart-plus me-1"></i> Agregar al carrito
+                              </button>
+                            </div>
+                      </div>
+                    </div>
 
-              <% }) %>
-            </div>
-            <% } %>
+                    <% }) %>
+                </div>
+                <% } %>
           </div>
         </div>
       </div>
       <% }) %>
-    </div>
+  </div>
 
-    <!-- Modal agregar al carrito -->
-    <%- include('./partials/cartModal') %>
+  <!-- Modal agregar al carrito -->
+  <%- include('./partials/cartModal') %>
 
     <script src="/JS/cart.js"></script>
 
-    <a
-      href="/shop-cart"
+    <a href="/shop-cart"
       class="btn btn-dark position-fixed bottom-0 end-0 m-4 rounded-circle shadow d-flex align-items-center justify-content-center"
-      style="width: 60px; height: 60px; z-index: 1050"
-      title="Ver carrito"
-    >
+      style="width: 60px; height: 60px; z-index: 1050" title="Ver carrito">
       <i class="fas fa-shopping-cart"></i>
-      <span
-        id="cart-count"
-        class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill"
-        >0</span
-      >
+      <span id="cart-count"
+        class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">0</span>
     </a>
 
     <!-- Toast de éxito -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
-      <div
-        id="toastExito"
-        class="toast align-items-center text-bg-dark border-0"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-      >
-        <div class="d-flex">
-          <div class="toast-body">✅ Producto añadido al carrito.</div>
-          <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Cerrar"
-          ></button>
+      <div id="toastExito" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div id="toast-container" class="toast show bg-dark text-white">
+          <div class="d-flex">
+            <div class="toast-body">✅ Producto añadido al carrito.</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+              aria-label="Cerrar"></button>
+          </div>
         </div>
       </div>
     </div>
 
-    <script src="/JS/home.js"></script>
-  </body>
-  <footer class="bg-dark text-light text-center py-4 mt-5">
-    <div class="container">
-      <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
-      <div>
-        <a href="#" class="text-light text-decoration-none me-3">Términos</a>
-        <a href="#" class="text-light text-decoration-none">Privacidad</a>
+    <!-- Toast de redirección -->
+    <div id="redirectToast" class="toast position-fixed bottom-0 end-0 m-4 text-bg-dark" role="alert" style="z-index: 9999;">
+      <div class="toast-header">
+        <strong class="me-auto">Atención</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+      </div>
+      <div class="toast-body">
+        Debes iniciar sesión para continuar. Redirigiendo en <span id="countdown">3</span> segundos…
       </div>
     </div>
-  </footer>
+
+    <script src="/JS/home.js"></script>
+</body>
+<footer class="bg-dark text-light text-center py-4 mt-5">
+  <div class="container">
+    <p class="mb-1">© 2025 SoloFlayba. Todos los derechos reservados.</p>
+    <div>
+      <a href="#" class="text-light text-decoration-none me-3">Términos</a>
+      <a href="#" class="text-light text-decoration-none">Privacidad</a>
+    </div>
+  </div>
+</footer>
+
 </html>

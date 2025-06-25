@@ -1,3 +1,5 @@
+import * as paymentModel from '../models/paymentModel.mjs';
+
 import mercadopago from 'mercadopago';
 import 'dotenv/config';
 import { pool } from '../database.mjs';
@@ -22,11 +24,7 @@ export const checkout = async (req, res) => {
 
   try {
     // 1. Obtener ID del carrito activo del usuario
-    const [carritoRows] = await pool.query(
-      `SELECT id_carrito FROM carrito 
-       WHERE usuario_id_us = ? AND es_carrito = 1`,
-      [userId]
-    );
+    const [carritoRows] = await await paymentModel.getActiveCartIdByUserId(userId);
 
     if (carritoRows.length === 0) {
       return res.status(400).send('No hay carrito activo');

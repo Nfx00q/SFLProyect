@@ -1,3 +1,5 @@
+import * as cartModel from '../models/cartModel.mjs';
+
 import { pool } from '../database.mjs'; // asegúrate de importar el pool
 
 async function getHomePage(req, res) {

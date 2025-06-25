@@ -32,3 +32,10 @@ body {
 .portrait-image {
     width: 100%;
 }
+
+#toast-container {
+  position: fixed;
+  bottom: 20px; /* o top: 20px; si prefieres */
+  left: 20px;
+  z-index: 9999;
+}
