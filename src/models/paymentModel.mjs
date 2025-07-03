@@ -9,7 +9,7 @@ export async function getActiveCartIdByUserId(userId) {
      WHERE usuario_id_us = ? AND es_carrito = 1`,
     [userId]
   );
-  return cart;
+  return cart || null;
 }
 
 export async function getCartItemsForCheckout(cartId) {
@@ -26,17 +26,17 @@ export async function getCartItemsForCheckout(cartId) {
 
 export async function createOrder(userId, fecha, total) {
   const [result] = await pool.query(
-    'INSERT INTO pedido (usuario_id_us, fecha_pedido, total) VALUES (?, ?, ?)',
+    'INSERT INTO pedido (usuario_id_us, hora_fecha, total_pedido) VALUES (?, ?, ?)',
     [userId, fecha, total]
   );
   return result.insertId;
 }
 
-export async function addProductToOrder(orderId, varianteId, cantidad, precio) {
+export async function addProductToOrder(orderId, productoId, cantidad, precio) {
   const [result] = await pool.query(
-    `INSERT INTO producto_pedido (pedido_id_pedido, variante_producto_id_var, cantidad, precio)
+    `INSERT INTO producto_pedido (pedido_id_pedido, producto_id_producto, cantidad, precio)
      VALUES (?, ?, ?, ?)`,
-    [orderId, varianteId, cantidad, precio]
+    [orderId, productoId, cantidad, precio]
   );
   return result;
 }

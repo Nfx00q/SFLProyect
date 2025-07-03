@@ -2,8 +2,6 @@
 import { pool } from '../database.mjs';
 import * as productModel from '../models/productModel.mjs';
 
-// ======================== PRODUCTOS ========================
-
 export async function list(req, res) {
   const page = parseInt(req.query.page) || 1;
   const limit = 10;
@@ -33,15 +31,24 @@ export async function list(req, res) {
 }
 
 export async function create(req, res) {
-  const { nom_producto, des_producto, precio_producto, categoria_id_categoria, url_img } = req.body;
-  const nuevoProducto = { nom_producto, des_producto, precio_producto, categoria_id_categoria };
+  const { nom_producto, des_producto, precio_producto, categoria_id_categoria, url_img, es_novedad } = req.body;
+
+  const nuevoProducto = {
+    nom_producto,
+    descripcion: des_producto,
+    precio_producto,
+    categoria_id_categoria,
+    es_novedad: es_novedad ? 1 : 0
+  };
 
   try {
-    const [result] = await pool.query('INSERT INTO producto SET ?', nuevoProducto);
+    const insertId = await productModel.createProduct(nuevoProducto);
 
-    if (url_img && url_img.trim() !== '') {
-      const nuevoImg = { url_img, producto_id_producto: result.insertId };
-      await pool.query('INSERT INTO imagen_producto SET ?', nuevoImg);
+    if (url_img?.trim()) {
+      await pool.query('INSERT INTO imagen_producto SET ?', {
+        url_img,
+        producto_id_producto: insertId
+      });
     }
 
     res.redirect('/admin/products');
@@ -53,20 +60,27 @@ export async function create(req, res) {
 
 export async function update(req, res) {
   const id = req.params.id;
-  const { nom_producto, des_producto, precio_producto, categoria_id_categoria, url_img } = req.body;
-  const updatedProduct = { nom_producto, des_producto, precio_producto, categoria_id_categoria };
+  const { nom_producto, des_producto, precio_producto, categoria_id_categoria, url_img, es_novedad } = req.body;
+
+  const updatedProduct = {
+    id,
+    nom_producto,
+    descripcion: des_producto,
+    precio_producto,
+    categoria_id_categoria,
+    es_novedad: es_novedad ? 1 : 0
+  };
 
   try {
-    await pool.query('UPDATE producto SET ? WHERE id_producto = ?', [updatedProduct, id]);
+    await productModel.updateProduct(updatedProduct);
 
-    if (url_img && url_img.trim() !== '') {
+    if (url_img?.trim()) {
       const [results] = await pool.query('SELECT * FROM imagen_producto WHERE producto_id_producto = ?', [id]);
 
       if (results.length > 0) {
         await pool.query('UPDATE imagen_producto SET url_img = ? WHERE producto_id_producto = ?', [url_img, id]);
       } else {
-        const nuevaImg = { url_img, producto_id_producto: id };
-        await pool.query('INSERT INTO imagen_producto SET ?', nuevaImg);
+        await pool.query('INSERT INTO imagen_producto SET ?', { url_img, producto_id_producto: id });
       }
     } else {
       await pool.query('DELETE FROM imagen_producto WHERE producto_id_producto = ?', [id]);

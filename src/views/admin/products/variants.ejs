@@ -28,32 +28,44 @@
           </tr>
         </thead>
         <tbody>
-          <% variantes.forEach(v => { %>
+          <% if (variantes.length === 0) { %>
             <tr>
-              <td><%= v.id_var %></td>
-              <td><%= v.nom_talla %></td>
-              <td><%= v.stock_var %></td>
-              <td><span class="badge bg-success">$<%= v.precio_var %></span></td>
-              <td>
-                <div class="d-flex gap-2 justify-content-center">
-                  <form method="POST" action="/admin/products/variants/delete/<%= v.id_var %>/<%= producto.id_producto %>" onsubmit="return confirm('¿Eliminar variante?')">
-                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
-                  </form>
-                  <form method="POST" action="/admin/products/variants/update/<%= v.id_var %>" class="d-flex gap-1">
-                    <input type="hidden" name="producto_id" value="<%= producto.id_producto %>">
-                    <select name="talla_id_talla" class="form-select form-select-sm" required>
-                      <% tallas.forEach(t => { %>
-                        <option value="<%= t.id_talla %>" <%= v.talla_id_talla === t.id_talla ? 'selected' : '' %>><%= t.nom_talla %></option>
-                      <% }) %>
-                    </select>
-                    <input type="number" name="stock_var" value="<%= v.stock_var %>" class="form-control form-control-sm" min="0" required>
-                    <input type="number" name="precio_var" step="0.01" value="<%= v.precio_var %>" class="form-control form-control-sm" required>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
-                  </form>
-                </div>
-              </td>
+              <td colspan="5" class="text-muted text-center">No hay variantes registradas para este producto.</td>
             </tr>
-          <% }) %>
+          <% } else { %>
+            <% variantes.forEach(v => { %>
+              <tr>
+                <td><%= v.id_var %></td>
+                <td><%= v.nom_talla %></td>
+                <td>
+                  <% if (v.stock_var === 0) { %>
+                    <span class="badge bg-danger">Agotado</span>
+                  <% } else { %>
+                    <%= v.stock_var %>
+                  <% } %>
+                </td>
+                <td><span class="badge bg-success">$<%= v.precio_var %></span></td>
+                <td>
+                  <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <form method="POST" action="/admin/products/variants/delete/<%= v.id_var %>/<%= producto.id_producto %>" onsubmit="return confirm('¿Eliminar variante?')">
+                      <button class="btn btn-danger btn-sm" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                    <form method="POST" action="/admin/products/variants/update/<%= v.id_var %>" class="d-flex flex-wrap gap-1">
+                      <input type="hidden" name="producto_id" value="<%= producto.id_producto %>">
+                      <select name="talla_id_talla" class="form-select form-select-sm w-auto" required>
+                        <% tallas.forEach(t => { %>
+                          <option value="<%= t.id_talla %>" <%= v.talla_id_talla === t.id_talla ? 'selected' : '' %>><%= t.nom_talla %></option>
+                        <% }) %>
+                      </select>
+                      <input type="number" name="stock_var" value="<%= v.stock_var %>" class="form-control form-control-sm w-auto" min="0" required>
+                      <input type="number" name="precio_var" step="0.01" min="0" value="<%= v.precio_var %>" class="form-control form-control-sm w-auto" required>
+                      <button type="submit" class="btn btn-primary btn-sm" title="Actualizar"><i class="fas fa-edit"></i></button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          <% } %>
         </tbody>
       </table>
     </div>
@@ -75,7 +87,7 @@
       </div>
       <div class="col-md-3">
         <label class="form-label">Precio</label>
-        <input type="number" name="precio_var" class="form-control" step="0.01" required>
+        <input type="number" name="precio_var" class="form-control" step="0.01" min="0" required>
       </div>
       <div class="col-md-3 d-grid">
         <button type="submit" class="btn btn-success">

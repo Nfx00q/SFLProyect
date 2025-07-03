@@ -1,3 +1,5 @@
+Instalar node_modules: npm install
+Instalar localtunnel: npm install -g localtunnel
 Iniciar localtunnel: npx lt --port 3000 --subdomain flayba123456demo
 
 TARJETA DE PRUEBA

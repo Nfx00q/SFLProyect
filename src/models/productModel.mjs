@@ -20,18 +20,21 @@ export async function getProductCount() {
   return count;
 }
 
-export async function createProduct({ nom_producto, descripcion }) {
+export async function createProduct({ nom_producto, descripcion, precio_producto, categoria_id_categoria, es_novedad }) {
   const [result] = await pool.query(
-    'INSERT INTO producto (nom_producto, descripcion) VALUES (?, ?)',
-    [nom_producto, descripcion]
+    `INSERT INTO producto (nom_producto, descripcion, precio_producto, categoria_id_categoria, es_novedad)
+     VALUES (?, ?, ?, ?, ?)`,
+    [nom_producto, descripcion, precio_producto, categoria_id_categoria, es_novedad]
   );
   return result.insertId;
 }
 
-export async function updateProduct({ nom_producto, descripcion, id }) {
+export async function updateProduct({ nom_producto, descripcion, precio_producto, categoria_id_categoria, es_novedad, id }) {
   const [result] = await pool.query(
-    'UPDATE producto SET nom_producto = ?, descripcion = ? WHERE id_producto = ?',
-    [nom_producto, descripcion, id]
+    `UPDATE producto
+     SET nom_producto = ?, descripcion = ?, precio_producto = ?, categoria_id_categoria = ?, es_novedad = ?
+     WHERE id_producto = ?`,
+    [nom_producto, descripcion, precio_producto, categoria_id_categoria, es_novedad, id]
   );
   return result;
 }
@@ -61,5 +64,17 @@ export async function createVariant({ producto_id_producto, talla_id_talla, prec
 
 export async function getCatalogWithFilters(sql) {
   const [rows] = await pool.query(sql);
+  return rows;
+}
+
+export async function getNovedades(limit = 8) {
+  const [rows] = await pool.query(`
+    SELECT p.*, i.url_img
+    FROM producto p
+    LEFT JOIN imagen_producto i ON p.id_producto = i.producto_id_producto
+    WHERE p.es_novedad = 1
+    ORDER BY p.fecha_agregado DESC
+    LIMIT ?
+  `, [limit]);
   return rows;
 }

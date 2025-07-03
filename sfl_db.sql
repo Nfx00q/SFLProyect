@@ -19,7 +19,8 @@ CREATE TABLE `carrito` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `carrito` (`id_carrito`, `fec_carrito`, `es_carrito`, `usuario_id_us`) VALUES
-(3, NULL, '1', 1);
+(3, NULL, '0', 1),
+(4, '2025-07-03 17:10:57', '0', 1);
 
 DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE `categoria` (
@@ -126,40 +127,42 @@ CREATE TABLE `producto` (
   `id_producto` int(11) NOT NULL,
   `nom_producto` varchar(255) NOT NULL,
   `des_producto` text DEFAULT NULL,
-  `precio_producto` decimal(10,2) NOT NULL,
+  `precio_producto` int(11) NOT NULL,
+  `es_novedad` tinyint(1) NOT NULL,
+  `fecha_agregado` date DEFAULT current_timestamp(),
   `categoria_id_categoria` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_producto`, `categoria_id_categoria`) VALUES
-(1, 'Polera Minimall 1', 'Diseño minimalista en algodón', 11990.00, 1),
-(2, 'Polera Minimal 2', 'Diseño minimalista en algodón', 11990.00, 1),
-(3, 'Polera Art 1', 'Diseño artístico exclusivo', 13990.00, 1),
-(4, 'Polera Art 2', 'Diseño artístico exclusivo', 13990.00, 1),
-(5, 'Polera Blackout', 'Polera negra oversize', 10990.00, 1),
-(6, 'Polera Blanca', 'Básica blanca unisex', 8990.00, 1),
-(7, 'Polera Urbana', 'Estilo urbano impreso', 12990.00, 1),
-(8, 'Polera Oldschool', 'Diseño retro', 12990.00, 1),
-(9, 'Polera Estampada', 'Estampado original', 13990.00, 1),
-(11, 'Buzo boogy', 'Estilo 8ball', 19990.00, 2),
-(12, 'Buzo boogy', 'Estilo calabera', 17990.00, 2),
-(13, 'Buzo boogy', 'Estilo happy face', 20990.00, 2),
-(14, 'Buzo boogy', 'Estilo artistico', 18990.00, 2),
-(15, 'Buzo boogy', 'Estilo tiger', 17990.00, 2),
-(16, 'Buzo boogy', 'Estilo butterfly', 19990.00, 2),
-(17, 'Buzo boogy', 'Estilo wings', 18990.00, 2),
-(18, 'Buzo boogy', 'Estilo hawk', 18990.00, 2),
-(19, 'Buzo boogy', 'Estilo rose', 20990.00, 2),
-(24, 'Chaqueta winter', 'Estilo blackout', 30000.00, 3),
-(25, 'Chaqueta winter', 'Estilo brown', 28000.00, 3),
-(26, 'Chaqueta winter', 'Estilo darkblue', 32000.00, 3),
-(27, 'Chaqueta winter', 'Estilo cappuccino', 31000.00, 3),
-(28, 'Chaqueta winter', 'Estilo marca original / Brown', 27000.00, 3),
-(29, 'Chaqueta winter', 'Estilo darkgreen', 45000.00, 3),
-(30, 'Chaqueta winter', 'Estilo light cream', 40000.00, 3),
-(42, 'Zapatillas runner', 'Estilo runner black', 55000.00, 9),
-(43, 'Zapatillas training', 'Calzado deportivo', 62000.00, 9),
-(44, 'Zapatillas runner', 'Estilo black and red', 59000.00, 9),
-(45, 'Zapatillas tracking', 'Estilo terreno / Black', 65000.00, 9);
+INSERT INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_producto`, `es_novedad`, `fecha_agregado`, `categoria_id_categoria`) VALUES
+(1, 'Polera Minimall 1', 'Diseño minimalista en algodón', 11990, 1, NULL, 1),
+(2, 'Polera Minimal 2', 'Diseño minimalista en algodón', 11990, 0, NULL, 1),
+(3, 'Polera Art 1', 'Diseño artístico exclusivo', 13990, 0, NULL, 1),
+(4, 'Polera Art 2', 'Diseño artístico exclusivo', 13990, 0, NULL, 1),
+(5, 'Polera Blackout', 'Polera negra oversize', 10990, 0, NULL, 1),
+(6, 'Polera Blanca', 'Básica blanca unisex', 8990, 0, NULL, 1),
+(7, 'Polera Urbana', 'Estilo urbano impreso', 12990, 0, NULL, 1),
+(8, 'Polera Oldschool', 'Diseño retro', 12990, 0, NULL, 1),
+(9, 'Polera Estampada', 'Estampado original', 13990, 0, NULL, 1),
+(11, 'Buzo boogy', 'Estilo 8ball', 19990, 0, NULL, 2),
+(12, 'Buzo boogy', 'Estilo calabera', 17990, 0, NULL, 2),
+(13, 'Buzo boogy', 'Estilo happy face', 20990, 0, NULL, 2),
+(14, 'Buzo boogy', 'Estilo artistico', 18990, 0, NULL, 2),
+(15, 'Buzo boogy', 'Estilo tiger', 17990, 0, NULL, 2),
+(16, 'Buzo boogy', 'Estilo butterfly', 19990, 0, NULL, 2),
+(17, 'Buzo boogy', 'Estilo wings', 18990, 0, NULL, 2),
+(18, 'Buzo boogy', 'Estilo hawk', 18990, 0, NULL, 2),
+(19, 'Buzo boogy', 'Estilo rose', 20990, 0, NULL, 2),
+(24, 'Chaqueta winter', 'Estilo blackout', 30000, 1, NULL, 3),
+(25, 'Chaqueta winter', 'Estilo brown', 28000, 0, NULL, 3),
+(26, 'Chaqueta winter', 'Estilo darkblue', 32000, 0, NULL, 3),
+(27, 'Chaqueta winter', 'Estilo cappuccino', 31000, 0, NULL, 3),
+(28, 'Chaqueta winter', 'Estilo marca original / Brown', 27000, 0, NULL, 3),
+(29, 'Chaqueta winter', 'Estilo darkgreen', 45000, 0, NULL, 3),
+(30, 'Chaqueta winter', 'Estilo light cream', 40000, 1, NULL, 3),
+(42, 'Zapatillas runner', 'Estilo runner black', 55000, 0, NULL, 9),
+(43, 'Zapatillas training', 'Calzado deportivo', 62000, 0, NULL, 9),
+(44, 'Zapatillas runner', 'Estilo black and red', 59000, 0, NULL, 9),
+(45, 'Zapatillas tracking', 'Estilo terreno / Black', 65000, 1, NULL, 9);
 
 DROP TABLE IF EXISTS `producto_carrito`;
 CREATE TABLE `producto_carrito` (
@@ -179,6 +182,18 @@ CREATE TABLE `producto_pedido` (
   `cantidad` int(11) NOT NULL,
   `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `producto_pedido` (`id`, `pedido_id_pedido`, `producto_id_producto`, `cantidad`, `precio`) VALUES
+(4, 3, 2, 1, 12434.00),
+(5, 4, 1, 1, 11892.00),
+(6, 6, 0, 1, 11892.00),
+(7, 7, 0, 1, 11892.00),
+(8, 8, 0, 1, 11892.00),
+(9, 9, 0, 1, 11892.00),
+(10, 10, 0, 1, 11892.00),
+(11, 11, 0, 1, 11892.00),
+(12, 12, 0, 1, 11892.00),
+(13, 13, 0, 1, 13626.00);
 
 DROP TABLE IF EXISTS `reg_usuario`;
 CREATE TABLE `reg_usuario` (
@@ -241,11 +256,11 @@ CREATE TABLE `variante_producto` (
 INSERT INTO `variante_producto` (`id_var`, `producto_id_producto`, `talla_id_talla`, `stock_var`, `precio_var`) VALUES
 (1, 1, 1, 38, 13146),
 (2, 1, 2, 14, 12845),
-(3, 1, 3, 40, 11892),
+(3, 1, 3, 37, 11892),
 (4, 1, 4, 6, 13123),
 (5, 1, 5, 46, 11564),
 (6, 1, 6, 39, 11865),
-(7, 2, 1, 24, 13626),
+(7, 2, 1, 23, 13626),
 (8, 2, 2, 14, 12434),
 (9, 2, 3, 42, 12079),
 (10, 2, 4, 6, 13545),
@@ -373,7 +388,7 @@ ALTER TABLE `variante_producto`
 
 
 ALTER TABLE `carrito`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
@@ -382,22 +397,22 @@ ALTER TABLE `direccion`
   MODIFY `id_direccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `envio`
-  MODIFY `id_envio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_envio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 ALTER TABLE `imagen_producto`
   MODIFY `id_img` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 ALTER TABLE `producto`
   MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 ALTER TABLE `producto_carrito`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 ALTER TABLE `producto_pedido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 ALTER TABLE `rol`
   MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;

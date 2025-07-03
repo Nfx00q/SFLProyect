@@ -1,6 +1,6 @@
 import * as cartModel from '../models/cartModel.mjs';
-
-import { pool } from '../database.mjs'; // asegúrate de importar el pool
+import * as productModel from '../models/productModel.mjs';
+import { pool } from '../database.mjs';
 
 async function getHomePage(req, res) {
   try {
@@ -17,6 +17,7 @@ async function getHomePage(req, res) {
     `);
     conn.release();
 
+    // ✅ Organizar por categorías
     const categorias = {};
     rows.forEach((row) => {
       if (!categorias[row.id_categoria]) {
@@ -36,8 +37,11 @@ async function getHomePage(req, res) {
       }
     });
 
-    const carritoVacio = !req.session.cart || req.session.cart.length === 0;
+    // ✅ Obtener novedades
+    const novedades = await productModel.getNovedades();
 
+    // ✅ Carrito
+    const carritoVacio = !req.session.cart || req.session.cart.length === 0;
     const [carrito] = await pool.query(`
       SELECT SUM(cantidad) AS total
       FROM producto_carrito pc
@@ -45,13 +49,14 @@ async function getHomePage(req, res) {
       WHERE c.usuario_id_us = ? AND c.es_carrito = 1
     `, [req.session.usuario?.id]);
 
-
     res.render("home", {
       categorias,
+      novedades,
       carritoVacio,
       usuario: req.session.usuario || null,
       totalCarrito: carrito[0]?.total || 0
     });
+
   } catch (err) {
     console.error('Error en getHomePage:', err);
     res.status(500).send("Error al obtener datos de la base de datos");
