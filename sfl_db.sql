@@ -18,10 +18,6 @@ CREATE TABLE `carrito` (
   `usuario_id_us` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `carrito` (`id_carrito`, `fec_carrito`, `es_carrito`, `usuario_id_us`) VALUES
-(3, NULL, '0', 1),
-(4, '2025-07-03 17:10:57', '0', 1);
-
 DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE `categoria` (
   `id_categoria` int(11) NOT NULL,
@@ -33,7 +29,7 @@ INSERT INTO `categoria` (`id_categoria`, `nom_categoria`, `des_categoria`) VALUE
 (1, 'Poleras', 'Poleras para toda ocasión'),
 (2, 'Pantalones', 'Variedad de pantalones'),
 (3, 'Chaquetas', 'Chaquetas para el invierno'),
-(9, 'Zapatillas', 'Calzado urbano y deportivo');
+(4, 'Calzado', 'Calzado vario');
 
 DROP TABLE IF EXISTS `direccion`;
 CREATE TABLE `direccion` (
@@ -45,6 +41,9 @@ CREATE TABLE `direccion` (
   `cod_postal` varchar(20) NOT NULL,
   `pais` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `direccion` (`id_direccion`, `usuario_id_us`, `calle`, `ciudad`, `region`, `cod_postal`, `pais`) VALUES
+(1, 1, 'Cerro Tronador 2114', 'Santiago', 'Metropolitana de Santiago', '8150000', 'Chile');
 
 DROP TABLE IF EXISTS `envio`;
 CREATE TABLE `envio` (
@@ -104,15 +103,6 @@ INSERT INTO `imagen_producto` (`id_img`, `producto_id_producto`, `url_img`) VALU
 (119, 44, '031.png'),
 (120, 45, '034.png');
 
-DROP TABLE IF EXISTS `pago`;
-CREATE TABLE `pago` (
-  `id_pago` int(11) NOT NULL,
-  `pedido_id_pedido` int(11) NOT NULL,
-  `meto_pago` varchar(50) NOT NULL,
-  `est_pago` varchar(50) DEFAULT 'pendiente',
-  `monto_pago` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 DROP TABLE IF EXISTS `pedido`;
 CREATE TABLE `pedido` (
   `id_pedido` int(11) NOT NULL,
@@ -159,10 +149,10 @@ INSERT INTO `producto` (`id_producto`, `nom_producto`, `des_producto`, `precio_p
 (28, 'Chaqueta winter', 'Estilo marca original / Brown', 27000, 0, NULL, 3),
 (29, 'Chaqueta winter', 'Estilo darkgreen', 45000, 0, NULL, 3),
 (30, 'Chaqueta winter', 'Estilo light cream', 40000, 1, NULL, 3),
-(42, 'Zapatillas runner', 'Estilo runner black', 55000, 0, NULL, 9),
-(43, 'Zapatillas training', 'Calzado deportivo', 62000, 0, NULL, 9),
-(44, 'Zapatillas runner', 'Estilo black and red', 59000, 0, NULL, 9),
-(45, 'Zapatillas tracking', 'Estilo terreno / Black', 65000, 1, NULL, 9);
+(42, 'Zapatillas runner', 'Estilo runner black', 19800, 0, NULL, 4),
+(43, 'Zapatillas training', 'Calzado deportivo', 68200, 0, NULL, 4),
+(44, 'Zapatillas runner', 'Estilo black and red', 64900, 0, NULL, 4),
+(45, 'Zapatillas tracking', 'Estilo terreno / Black', 71500, 1, NULL, 4);
 
 DROP TABLE IF EXISTS `producto_carrito`;
 CREATE TABLE `producto_carrito` (
@@ -181,26 +171,6 @@ CREATE TABLE `producto_pedido` (
   `producto_id_producto` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
   `precio` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-INSERT INTO `producto_pedido` (`id`, `pedido_id_pedido`, `producto_id_producto`, `cantidad`, `precio`) VALUES
-(4, 3, 2, 1, 12434.00),
-(5, 4, 1, 1, 11892.00),
-(6, 6, 0, 1, 11892.00),
-(7, 7, 0, 1, 11892.00),
-(8, 8, 0, 1, 11892.00),
-(9, 9, 0, 1, 11892.00),
-(10, 10, 0, 1, 11892.00),
-(11, 11, 0, 1, 11892.00),
-(12, 12, 0, 1, 11892.00),
-(13, 13, 0, 1, 13626.00);
-
-DROP TABLE IF EXISTS `reg_usuario`;
-CREATE TABLE `reg_usuario` (
-  `id_reg` int(11) NOT NULL,
-  `usuario_id_us` int(11) DEFAULT NULL,
-  `acc_reg` varchar(255) DEFAULT NULL,
-  `fec_reg` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `rol`;
@@ -391,7 +361,7 @@ ALTER TABLE `carrito`
   MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `categoria`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2000;
 
 ALTER TABLE `direccion`
   MODIFY `id_direccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
@@ -431,7 +401,7 @@ ALTER TABLE `pedido`
   ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`usuario_id_us`) REFERENCES `usuario` (`id_us`);
 
 ALTER TABLE `producto`
-  ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`categoria_id_categoria`) REFERENCES `categoria` (`id_categoria`);
+  ADD CONSTRAINT `fk_producto_categoria` FOREIGN KEY (`categoria_id_categoria`) REFERENCES `categoria` (`id_categoria`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `usuario`
   ADD CONSTRAINT `fk_estado_usuario` FOREIGN KEY (`id_est`) REFERENCES `estado_usuario` (`id_est`),
