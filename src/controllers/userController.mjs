@@ -99,24 +99,36 @@ export async function deleteUser(req, res) {
 
 export async function getUserDetail(req, res) {
   const { id } = req.params;
+  const userId = parseInt(id);
+
+  if (isNaN(userId)) return res.status(400).send('ID inválido');
 
   try {
-    const [[usuario]] = await await userModel.getUserById(id);
+    const usuario = await userModel.getUserById(userId);
+    if (!usuario) return res.status(404).send('Usuario no encontrado');
 
-    if (!usuario) {
-      return res.status(404).send('Usuario no encontrado');
-    }
+    const [rolRows] = await pool.query('SELECT * FROM rol WHERE id_rol = ?', [usuario.rol_id_rol]);
+    const rol = rolRows[0] || null;
 
-    const [[rol]] = await pool.query('SELECT * FROM rol WHERE id_rol = ?', [usuario.rol_id_rol]);
-    const [[direccion]] = await pool.query('SELECT * FROM direccion WHERE usuario_id_us = ?', [id]);
-    const [carrito] = await pool.query('SELECT * FROM carrito WHERE usuario_id_us = ?', [id]);
-    const [pedidos] = await pool.query('SELECT * FROM pedido WHERE usuario_id_us = ?', [id]);
+    const [direccionRows] = await pool.query('SELECT * FROM direccion WHERE usuario_id_us = ?', [userId]);
+    const direccion = direccionRows[0] || null;
+
+    const [carrito] = await pool.query('SELECT * FROM carrito WHERE usuario_id_us = ?', [userId]);
+
+
+    const [pedidos] = await pool.query(`
+      SELECT p.*, d.calle, d.ciudad, d.region, d.cod_postal, d.pais
+      FROM pedido p
+      LEFT JOIN direccion d ON p.direccion_id_direccion = d.id_direccion
+      WHERE p.usuario_id_us = ?
+    `, [userId]);
+
     const [envios] = await pool.query(`
       SELECT e.*
       FROM envio e
       JOIN pedido p ON e.pedido_id_pedido = p.id_pedido
       WHERE p.usuario_id_us = ?
-    `, [id]);
+    `, [userId]);
 
     res.render('admin/users/userDetails', {
       usuario,
@@ -126,11 +138,13 @@ export async function getUserDetail(req, res) {
       pedidos,
       envios
     });
+
   } catch (error) {
     console.error('Error al obtener detalle de usuario:', error);
     res.status(500).send('Error interno del servidor');
   }
 }
+
 
 export const validateUser = [
   body('nom_us').isLength({ min: 2 }).withMessage('Nombre demasiado corto'),

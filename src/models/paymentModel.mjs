@@ -24,11 +24,10 @@ export async function getCartItemsForCheckout(cartId) {
   return items;
 }
 
-export async function createOrder(userId, fecha, total) {
-  const [result] = await pool.query(
-    'INSERT INTO pedido (usuario_id_us, hora_fecha, total_pedido) VALUES (?, ?, ?)',
-    [userId, fecha, total]
-  );
+export async function createOrder(userId, fecha, total, direccionId) {
+  const [result] = await pool.query(`
+    INSERT INTO pedido (usuario_id_us, hora_fecha, total_pedido, direccion_id_direccion)
+    VALUES (?, ?, ?, ?)`, [userId, fecha, total, direccionId]);
   return result.insertId;
 }
 

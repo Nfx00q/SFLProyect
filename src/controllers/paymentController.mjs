@@ -15,7 +15,7 @@ function generarCodigoSeguimiento() {
   return `${letra}${numeros}`;
 }
 
-export const checkout = async (req, res) => {
+export const iniciarPago = async (req, res) => {
   if (!req.session.usuario) return res.redirect('/login');
   const userId = req.session.usuario.id;
 
@@ -95,8 +95,15 @@ export const success = async (req, res) => {
     const costoDespacho = 3000;
     const totalConDespacho = subtotal + costoDespacho;
 
-    // 4. Crear pedido
-    const pedidoId = await paymentModel.createOrder(userId, new Date(), totalConDespacho);
+    // 4. Obtener dirección del usuario
+    const [direccion] = await pool.query(`
+      SELECT id_direccion FROM direccion
+      WHERE usuario_id_us = ? LIMIT 1`, [userId]);
+
+    const direccionId = direccion.length > 0 ? direccion[0].id_direccion : null;
+
+    // 5. Crear pedido incluyendo dirección
+    const pedidoId = await paymentModel.createOrder(userId, new Date(), totalConDespacho, direccionId);
 
     // 5. Agregar productos y descontar stock
     for (const item of items) {
@@ -147,9 +154,24 @@ export const showCheckout = async (req, res) => {
     JOIN producto p ON vp.producto_id_producto = p.id_producto
     WHERE pc.carrito_id_carrito = ?`, [carritoId]);
 
+  const [direcciones] = await pool.query(`
+    SELECT * FROM direccion WHERE usuario_id_us = ?`, [userId]);
+
   const subtotal = items.reduce((sum, item) => sum + item.price * item.cantidad, 0);
   const despacho = 3000;
   const total = subtotal + despacho;
 
-  res.render('checkout', { items, subtotal, despacho, total });
+  res.render('checkout', { items, subtotal, despacho, total, direcciones });
 };
+
+export const checkout = async (req, res) => {
+  if (!req.session.usuario) return res.redirect('/login');
+
+  const direccionId = req.body.direccion_id;
+  if (!direccionId) return res.status(400).send("Debes seleccionar una dirección.");
+
+  req.session.direccion_id = direccionId;
+
+  return iniciarPago(req, res);
+};
+

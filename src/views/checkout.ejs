@@ -38,6 +38,20 @@
       </div>
 
       <form action="/payment/checkout" method="POST" class="text-end">
+        <% if (direcciones && direcciones.length > 0) { %>
+          <div class="mb-4">
+            <label for="direccion_id" class="form-label fw-medium">Selecciona una dirección de envío:</label>
+            <select name="direccion_id" id="direccion_id" class="form-select" required>
+              <% direcciones.forEach(dir => { %>
+                <option value="<%= dir.id_direccion %>">
+                  <%= dir.calle %>, <%= dir.ciudad %>, <%= dir.region %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+        <% } else { %>
+          <div class="alert alert-warning">No tienes direcciones registradas. <a href="/perfil/direcciones">Agrega una</a>.</div>
+        <% } %>
         <button type="submit" class="btn btn-success px-4">Confirmar y pagar</button>
       </form>
     </div>

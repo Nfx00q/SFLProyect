@@ -33,8 +33,8 @@ export async function createUser({ nom_us, mail_us, pass_us, rol_id_rol, id_est 
 }
 
 export async function getUserById(id) {
-  const [[user]] = await pool.query('SELECT * FROM usuario WHERE id_us = ?', [id]);
-  return user;
+  const [rows] = await pool.query('SELECT * FROM usuario WHERE id_us = ?', [id]);
+  return rows[0]; // Devuelve solo el usuario encontrado
 }
 
 export async function updateUserWithPassword({ nom_us, mail_us, pass_us, rol_id_rol, id_est, id }) {

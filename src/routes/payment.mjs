@@ -1,6 +1,6 @@
 // routes/payment.mjs
 import express from 'express';
-import { checkout, showCheckout } from '../controllers/paymentController.mjs';
+import { checkout, iniciarPago, showCheckout } from '../controllers/paymentController.mjs';
 import { success } from '../controllers/paymentController.mjs';
 
 const router = express.Router();
